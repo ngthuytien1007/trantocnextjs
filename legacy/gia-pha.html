@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Tộc Trần - Gia Phả</title>
+  <meta content="Sơ đồ cây gia phả dòng họ Trần - Truyền thống ngàn năm" name="description">
+  <meta content="gia phả, họ Trần, dòng tộc, cây phả hệ" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap Icons only -->
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- GoJS -->
+  <script src="https://unpkg.com/gojs@3.0.4/release/go.js"></script>
+
+  <!-- Poppins for GoJS nodes -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:regular,medium,bold&subset=latin,latin-ext"
+    rel="stylesheet" type="text/css">
+
+  <style>
+    /* ============================================
+       GIA PHẢ PAGE — PREMIUM CUSTOM STYLES
+       ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    :root {
+      --gp-gold: #cca625;
+      --gp-royal-red: #800000;
+      --gp-glass-bg: rgba(255, 255, 255, 0.08);
+      --gp-glass-border: rgba(255, 255, 255, 0.15);
+      --gp-glass-text: #f3f4f6;
+    }
+
+    /* Diagram wrapper */
+    .gia-pha-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 500px;
+      overflow: hidden;
+      transition: background 0.6s ease;
+    }
+
+    /* Theme backgrounds */
+    .gia-pha-wrapper.theme-warm-sepia {
+      background: linear-gradient(135deg, #fcfaf7 0%, #eaddcd 50%, #d4c5a9 100%);
+    }
+
+    .gia-pha-wrapper.theme-royal-red {
+      background: radial-gradient(ellipse at center, #5c0606 0%, #1a0000 100%);
+    }
+
+    .gia-pha-wrapper.theme-dark-luxury {
+      background: radial-gradient(ellipse at center, #1e293b 0%, #0f172a 100%);
+    }
+
+    /* Traditional pattern overlay */
+    .gia-pha-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      pointer-events: none;
+      background-image: radial-gradient(circle at 1px 1px, var(--gp-gold) 1px, transparent 0);
+      background-size: 24px 24px;
+      z-index: 0;
+    }
+
+    /* GoJS Canvas */
+    #myDiagramDiv {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hide GoJS evaluation watermark */
+    #myDiagramDiv>div>div:first-child,
+    .gojs-control-left,
+    a[href*="gojs.net"],
+    div[id=""]>a {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    /* Hidden text for font preload */
+    #hidden {
+      font: 500 18px Poppins;
+      opacity: 0;
+      position: absolute;
+    }
+
+    /* ===== SEARCH BAR ===== */
+    .gp-search-bar {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 100;
+      max-width: 400px;
+      width: 90%;
+      pointer-events: none; /* Khắc phục đơ canvas */
+    }
+
+    .gp-search-bar input {
+      pointer-events: auto; /* Bật lại tương tác cho input */
+      flex: 1;
+      padding: 10px 16px;
+      border: 1.5px solid rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #1a0000;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .gp-search-bar input:focus {
+      border-color: var(--gp-gold);
+      box-shadow: 0 4px 20px rgba(204, 166, 37, 0.2);
+    }
+
+    .gp-search-bar button {
+      pointer-events: auto; /* Bật lại tương tác cho button */
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #d8b237 0%, #a4811a 100%);
+      border: none;
+      border-radius: 10px;
+      color: #1a0000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(204, 166, 37, 0.25);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+    }
+
+    .gp-search-bar button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(204, 166, 37, 0.4);
+    }
+
+    /* Dark theme search adjustments */
+    .theme-royal-red .gp-search-bar input,
+    .theme-dark-luxury .gp-search-bar input {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .theme-royal-red .gp-search-bar input::placeholder,
+    .theme-dark-luxury .gp-search-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* ===== FLOATING CONTROLS ===== */
+    .gp-floating-controls {
+      position: absolute;
+      bottom: 75px;
+      right: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+      pointer-events: none; /* Khắc phục đơ canvas */
+    }
+
+    .gp-float-btn {
+      pointer-events: auto; /* Bật lại tương tác cho các nút */
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(0, 0, 0, 0.1);
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transition: all 0.3s ease;
+    }
+
+    .gp-float-btn:hover {
+      transform: scale(1.1);
+      background: var(--gp-gold);
+      color: #1a0000;
+      border-color: var(--gp-gold);
+    }
+
+    .gp-float-btn.active {
+      background: #ef4444 !important;
+      color: white !important;
+      border-color: #ef4444 !important;
+    }
+
+    /* Dark theme floating buttons */
+    .theme-royal-red .gp-float-btn,
+    .theme-dark-luxury .gp-float-btn {
+      background: rgba(30, 41, 59, 0.88);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .theme-royal-red .gp-float-btn:hover,
+    .theme-dark-luxury .gp-float-btn:hover {
+      background: var(--gp-gold);
+      color: #1a0000;
+    }
+
+    /* Mobile-only toggle and group wrapper defaults */
+    .gp-master-btn,
+    .gp-search-toggle-btn {
+      display: none;
+    }
+
+    .gp-controls-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ===== THEME DRAWER ===== */
+    .gp-theme-drawer {
+      position: absolute;
+      bottom: 75px;
+      right: 85px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(0, 0, 0, 0.1);
+      padding: 12px 16px;
+      border-radius: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(15px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1001;
+    }
+
+    .gp-theme-drawer.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .gp-theme-opt {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(0, 0, 0, 0.15);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .gp-theme-opt:hover,
+    .gp-theme-opt.active {
+      transform: scale(1.2);
+      border-color: var(--gp-gold);
+      box-shadow: 0 0 0 3px rgba(204, 166, 37, 0.3);
+    }
+
+    .gp-theme-opt.opt-sepia {
+      background: linear-gradient(135deg, #fcfaf7, #eaddcd);
+    }
+
+    .gp-theme-opt.opt-red {
+      background: radial-gradient(circle, #5c0606, #1a0000);
+    }
+
+    .gp-theme-opt.opt-dark {
+      background: radial-gradient(circle, #1e293b, #0f172a);
+    }
+
+    /* Dark theme drawer */
+    .theme-royal-red .gp-theme-drawer,
+    .theme-dark-luxury .gp-theme-drawer {
+      background: rgba(15, 23, 42, 0.92);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===== NODE DETAIL POPUP ===== */
+    .gp-popup-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 10000;
+    }
+    .gp-popup-overlay.show {
+      display: flex;
+    }
+    .gp-popup-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 25px;
+      max-width: 92%;
+      width: 450px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+      position: relative;
+      animation: popupSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+    @keyframes popupSlideIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
+    }
+    .gp-popup-card .popup-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .gp-popup-card .popup-close:hover { color: #333; }
+
+    .popup-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--gp-gold);
+      margin-bottom: 14px;
+    }
+
+    .popup-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a0000;
+      margin-bottom: 4px;
+    }
+
+    .popup-badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .popup-badge.male   { background: #A2DAFF; color: #001C76; }
+    .popup-badge.female { background: #FFCBEA; color: #7A005E; }
+
+    .popup-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid #f0ece4;
+      padding-top: 16px;
+    }
+
+    .popup-info-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: #475569;
+    }
+    .popup-info-row i {
+      color: var(--gp-gold);
+      font-size: 1.1rem;
+      width: 22px;
+      text-align: center;
+    }
+
+    /* ===== TREE TITLE OVERLAY ===== */
+    .gp-tree-title {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      text-align: right;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .gp-tree-title h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #5c0606;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      margin: 0;
+    }
+
+    .gp-tree-title p {
+      font-size: 0.78rem;
+      color: #888;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    /* Dark theme title */
+    .theme-royal-red .gp-tree-title h2,
+    .theme-dark-luxury .gp-tree-title h2 {
+      color: var(--gp-gold);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .theme-royal-red .gp-tree-title p,
+    .theme-dark-luxury .gp-tree-title p {
+      color: #aaa;
+    }
+
+    /* ===== SEARCH RESULTS DROPDOWN ===== */
+    .gp-search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 4px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+      z-index: 101;
+    }
+
+    .gp-search-results.show {
+      display: block;
+    }
+
+    .gp-search-results .result-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #333;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gp-search-results .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .gp-search-results .result-item:hover {
+      background: #fdf8e8;
+    }
+
+    .gp-search-results .result-item i {
+      color: var(--gp-gold);
+    }
+
+    .theme-royal-red .gp-search-results,
+    .theme-dark-luxury .gp-search-results {
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .theme-royal-red .gp-search-results .result-item,
+    .theme-dark-luxury .gp-search-results .result-item {
+      color: #ddd;
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-royal-red .gp-search-results .result-item:hover,
+    .theme-dark-luxury .gp-search-results .result-item:hover {
+      background: rgba(204, 166, 37, 0.15);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    /* ===== HOME BUTTON ===== */
+    .gp-home-btn {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 1000;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #1a0000;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1.5px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      transition: all 0.3s ease;
+    }
+
+    .gp-home-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      background: var(--gp-gold);
+      color: #1a0000;
+      border-color: var(--gp-gold);
+    }
+
+    /* Dark theme home button */
+    .theme-royal-red .gp-home-btn,
+    .theme-dark-luxury .gp-home-btn {
+      background: rgba(30, 41, 59, 0.88);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .theme-royal-red .gp-home-btn:hover,
+    .theme-dark-luxury .gp-home-btn:hover {
+      background: var(--gp-gold);
+      color: #1a0000;
+    }
+
+    @media (max-width: 768px) {
+      .gia-pha-wrapper {
+        height: 100vh;
+      }
+
+      /* Search bar → slide down from top overlay on mobile */
+      .gp-search-bar {
+        position: absolute;
+        top: -80px;
+        bottom: auto;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        z-index: 1005;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .gp-search-bar.show {
+        top: 20px;
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .gp-search-bar input {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
+
+      .gp-search-bar button {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+      }
+
+      /* Search results open downward below the slid-down bar */
+      .gp-search-results {
+        top: 100%;
+        bottom: auto;
+        margin-top: 4px;
+        margin-bottom: 0;
+      }
+
+      /* Floating controls safe at bottom, prevents layout shift or overlapping */
+      .gp-floating-controls {
+        bottom: 135px;
+        right: 20px;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .gp-master-btn {
+        display: flex;
+        z-index: 1002;
+      }
+
+      .gp-controls-group {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 10px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(20px);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .gp-floating-controls.expanded .gp-controls-group {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+      }
+
+      .gp-search-toggle-btn {
+        display: flex;
+      }
+
+      .gp-float-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+      }
+
+      .gp-theme-drawer {
+        right: 20px;
+        bottom: 195px;
+        transform: translateY(15px);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .gp-theme-drawer.open {
+        transform: translateY(0);
+      }
+
+      .gp-tree-title {
+        top: 10px;
+        right: 12px;
+        left: auto;
+      }
+
+      .gp-tree-title h2 {
+        font-size: 1.1rem;
+      }
+
+      .gp-home-btn {
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Gia Phả Section ======= -->
+  <div class="gia-pha-wrapper theme-warm-sepia" id="gia-pha-wrapper">
+
+    <!-- Home Button -->
+    <a href="index.html" class="gp-home-btn"><i class="bi bi-house-fill"></i> Trang chủ</a>
+
+    <!-- Search Bar -->
+    <div class="gp-search-bar" id="gp-search-bar">
+      <input type="text" id="gp-search-input" placeholder="Tìm kiếm theo tên..." autocomplete="off">
+      <button onclick="gpSearch()" id="gp-search-btn"><i class="bi bi-search"></i> Tìm</button>
+      <div class="gp-search-results" id="gp-search-results"></div>
+    </div>
+
+    <!-- Tree Title -->
+    <div class="gp-tree-title">
+      <h2>TRẦN TỘC GIA PHẢ</h2>
+      <p>Sơ Đồ Cây Phả Hệ Dòng Họ</p>
+    </div>
+
+    <!-- GoJS Diagram -->
+    <div id="myDiagramDiv"></div>
+    <div id="myOverviewDiv" style="position: absolute; bottom: 20px; left: 20px; width: 180px; height: 130px; background: rgba(255, 255, 255, 0.95); border: 1.5px solid rgba(0,0,0,0.1); border-radius: 12px; z-index: 500; box-shadow: 0 8px 16px rgba(0,0,0,0.1); pointer-events: auto;"></div>
+
+    <!-- Floating Controls -->
+    <div class="gp-floating-controls" id="gp-floating-controls">
+      <!-- Master Menu Toggle (Mobile Only) -->
+      <div class="gp-float-btn gp-master-btn" onclick="gpToggleMenu()" id="gp-master-btn" title="Điều khiển">
+        <i class="bi bi-sliders"></i>
+      </div>
+      <!-- Group of Control Buttons -->
+      <div class="gp-controls-group">
+        <div class="gp-float-btn gp-search-toggle-btn" onclick="gpToggleSearch()" title="Tìm kiếm"><i
+            class="bi bi-search"></i></div>
+        <div class="gp-float-btn" onclick="gpZoomIn()" title="Phóng to"><i class="bi bi-plus-lg"></i></div>
+        <div class="gp-float-btn" onclick="gpZoomOut()" title="Thu nhỏ"><i class="bi bi-dash-lg"></i></div>
+        <div class="gp-float-btn" onclick="gpZoomFit()" title="Vừa khung hình"><i class="bi bi-arrows-fullscreen"></i>
+        </div>
+        <div class="gp-float-btn" onclick="gpCenterRoot()" title="Về gốc"><i class="bi bi-house-fill"></i></div>
+        <div class="gp-float-btn" onclick="gpToggleTheme()" title="Đổi hình nền"><i class="bi bi-palette-fill"></i>
+        </div>
+        <div class="gp-float-btn" onclick="gpExpandAll()" title="Mở rộng toàn bộ"><i class="bi bi-diagram-3-fill"></i>
+        </div>
+        <div class="gp-float-btn" onclick="gpStartRelationCheck()" id="relation-btn" title="Xác định xưng hô"><i
+            class="bi bi-people-fill"></i></div>
+      </div>
+    </div>
+
+    <!-- Theme Drawer -->
+    <div class="gp-theme-drawer" id="gp-theme-drawer">
+      <div class="gp-theme-opt opt-sepia active" onclick="gpSetTheme('warm-sepia')" title="Hoài Cổ"></div>
+      <div class="gp-theme-opt opt-red" onclick="gpSetTheme('royal-red')" title="Đỏ Hoàng Gia"></div>
+      <div class="gp-theme-opt opt-dark" onclick="gpSetTheme('dark-luxury')" title="Tối Cao Cấp"></div>
+    </div>
+
+  </div>
+
+  <!-- Node Detail Popup -->
+  <div class="gp-popup-overlay" id="gp-popup-overlay" onclick="gpClosePopup(event)">
+    <div class="gp-popup-card" onclick="event.stopPropagation()">
+      <button class="popup-close" onclick="gpClosePopup()"><i class="bi bi-x-lg"></i></button>
+
+      <!-- Header Info -->
+      <div style="text-align:center; padding-bottom: 15px; border-bottom: 1px solid #f0ece4;">
+        <img src="assets/img/avata.jpg" class="popup-avatar" id="popup-avatar" alt="Avatar">
+        <div class="popup-name" id="popup-name">—</div>
+        <div class="popup-sub-info" style="display:flex; justify-content:center; align-items:center; gap: 8px; margin-top: 6px;">
+          <span class="popup-badge male" id="popup-badge">Nam</span>
+          <span class="popup-title-badge" id="popup-title-badge"
+            style="background:#f0ece4; color:#5c0606; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">Đời 1</span>
+        </div>
+      </div>
+
+      <!-- Body Info -->
+      <div class="popup-info" style="margin-top: 15px; display:flex; flex-direction:column; gap: 12px;">
+        <!-- Tên tự -->
+        <div class="popup-info-row" id="popup-row-courtesy">
+          <i class="bi bi-bookmark-star-fill"></i>
+          <div>
+            <strong style="display:block; font-size: 0.78rem; color:#888; text-transform: uppercase;">Tên tự</strong>
+            <span id="popup-courtesy">—</span>
+          </div>
+        </div>
+        <!-- Ngày sinh -->
+        <div class="popup-info-row">
+          <i class="bi bi-calendar-check"></i>
+          <div>
+            <strong style="display:block; font-size: 0.78rem; color:#888; text-transform: uppercase;">Ngày sinh</strong>
+            <span id="popup-birth-solar" style="display:block;">Dương lịch: —</span>
+            <span id="popup-birth-lunar" style="display:block; font-size:0.85rem; color:#666;">Âm lịch: —</span>
+          </div>
+        </div>
+        <!-- Ngày mất (Ẩn nếu còn sống) -->
+        <div class="popup-info-row" id="popup-row-death">
+          <i class="bi bi-calendar-x-fill" style="color: #94a3b8;"></i>
+          <div>
+            <strong style="display:block; font-size: 0.78rem; color:#888; text-transform: uppercase;">Ngày mất</strong>
+            <span id="popup-death-solar" style="display:block;">Dương lịch: —</span>
+            <span id="popup-death-lunar" style="display:block; font-size:0.85rem; color:#666;">Âm lịch: —</span>
+          </div>
+        </div>
+        <!-- Nơi an táng (Mộ phần - Ẩn nếu còn sống) -->
+        <div class="popup-info-row" id="popup-row-burial">
+          <i class="bi bi-geo-alt-fill"></i>
+          <div>
+            <strong style="display:block; font-size: 0.78rem; color:#888; text-transform: uppercase;">Nơi an táng (Mộ phần)</strong>
+            <span id="popup-burial">—</span>
+          </div>
+        </div>
+        <!-- Tiểu sử tóm tắt -->
+        <div class="popup-info-row" id="popup-row-bio" style="align-items: flex-start; margin-top: 4px;">
+          <i class="bi bi-file-text-fill" style="margin-top: 3px;"></i>
+          <div>
+            <strong style="display:block; font-size: 0.78rem; color:#888; text-transform: uppercase;">Tiểu sử tóm tắt</strong>
+            <span id="popup-bio" style="display:block; font-size:0.88rem; line-height: 1.4; color:#444; text-align: justify;">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= GIA PHẢ GOJS LOGIC ======= -->
+  <script>
+    // ============================================
+    // 0. CUSTOM GENOGRAM LAYOUT
+    // ============================================
+    // A custom layout that shows spouses side-by-side and connects children from marriage node
+    class GenogramLayout extends go.LayeredDigraphLayout {
+      constructor() {
+        super();
+        this.initializeOption = go.LayeredDigraphInit.DepthFirstIn;
+        this.spouseSpacing = 30;  // minimum space between spouses
+        this.isRouting = false;
+      }
+
+      makeNetwork(coll) {
+        const net = this.createNetwork();
+        if (coll instanceof go.Diagram) {
+          this.add(net, coll.nodes, true);
+          this.add(net, coll.links, true);
+        } else if (coll instanceof go.Group) {
+          this.add(net, coll.memberParts, false);
+        } else if (coll.iterator) {
+          this.add(net, coll.iterator, false);
+        }
+        return net;
+      }
+
+      add(net, coll, nonmemberonly) {
+        const horiz = this.direction == 0.0 || this.direction == 180.0;
+        const multiSpousePeople = new go.Set();
+        const it = coll.iterator;
+        while (it.next()) {
+          const node = it.value;
+          if (!(node instanceof go.Node) || !node.data) continue;
+          if (!node.isLayoutPositioned || !node.isVisible()) continue;
+          if (nonmemberonly && node.containingGroup !== null) continue;
+
+          if (node.isLinkLabel) {
+            const link = node.labeledLink;
+            if (link.category === "Marriage") {
+              const spouseA = link.fromNode;
+              const spouseB = link.toNode;
+              const vertex = net.addNode(node);
+              if (horiz) {
+                vertex.height = spouseA.actualBounds.height + this.spouseSpacing + spouseB.actualBounds.height;
+                vertex.width = Math.max(spouseA.actualBounds.width, spouseB.actualBounds.width);
+                vertex.focus = new go.Point(vertex.width / 2, spouseA.actualBounds.height + this.spouseSpacing / 2);
+              } else {
+                vertex.width = spouseA.actualBounds.width + this.spouseSpacing + spouseB.actualBounds.width;
+                vertex.height = Math.max(spouseA.actualBounds.height, spouseB.actualBounds.height);
+                vertex.focus = new go.Point(spouseA.actualBounds.width + this.spouseSpacing / 2, vertex.height / 2);
+              }
+            }
+          } else {
+            let marriages = 0;
+            node.linksConnected.each(l => {
+              if (l.category === "Marriage") marriages++;
+            });
+            if (marriages === 0) {
+              net.addNode(node);
+            } else if (marriages > 1) {
+              multiSpousePeople.add(node);
+            }
+          }
+        }
+
+        it.reset();
+        while (it.next()) {
+          const link = it.value;
+          if (!(link instanceof go.Link)) continue;
+          if (!link.isLayoutPositioned || !link.isVisible()) continue;
+          if (nonmemberonly && link.containingGroup !== null) continue;
+
+          if (link.category === "Descent" && link.data) {
+            const parent = net.findVertex(link.fromNode);
+            const child = net.findVertex(link.toNode);
+            if (child !== null) {
+              net.linkVertexes(parent, child, link);
+            } else {
+              link.toNode.linksConnected.each(l => {
+                if (l.category !== "Marriage" || !l.data) return;
+                const mlab = l.labelNodes.first();
+                const mlabvert = net.findVertex(mlab);
+                if (mlabvert !== null) {
+                  net.linkVertexes(parent, mlabvert, link);
+                }
+              });
+            }
+          }
+        }
+
+        while (multiSpousePeople.count > 0) {
+          const node = multiSpousePeople.first();
+          const cohort = new go.Set();
+          this.extendCohort(cohort, node);
+          const dummyvert = net.createVertex();
+          net.addVertex(dummyvert);
+          const marriages = new go.Set();
+          cohort.each(n => {
+            n.linksConnected.each(l => {
+              marriages.add(l);
+            })
+          });
+          marriages.each(link => {
+            const mlab = link.labelNodes.first()
+            const v = net.findVertex(mlab);
+            if (v !== null) {
+              net.linkVertexes(dummyvert, v, null);
+            }
+          });
+          multiSpousePeople.removeAll(cohort);
+        }
+      }
+
+      extendCohort(coll, node) {
+        if (coll.has(node)) return;
+        coll.add(node);
+        node.linksConnected.each(l => {
+          if (l.category === "Marriage") {
+            this.extendCohort(coll, l.fromNode);
+            this.extendCohort(coll, l.toNode);
+          }
+        });
+      }
+
+      assignLayers() {
+        super.assignLayers();
+        const horiz = this.direction == 0.0 || this.direction == 180.0;
+        const maxsizes = [];
+        this.network.vertexes.each(v => {
+          const lay = v.layer;
+          let max = maxsizes[lay];
+          if (max === undefined) max = 0;
+          const sz = (horiz ? v.width : v.height);
+          if (sz > max) maxsizes[lay] = sz;
+        });
+        this.network.vertexes.each(v => {
+          const lay = v.layer;
+          const max = maxsizes[lay];
+          if (horiz) {
+            v.focus = new go.Point(0, v.height / 2);
+            v.width = max;
+          } else {
+            v.focus = new go.Point(v.width / 2, 0);
+            v.height = max;
+          }
+        });
+      }
+
+      initializeIndices() {
+        super.initializeIndices();
+        const vertical = this.direction === 90 || this.direction === 270;
+        this.network.edges.each(e => {
+          if (e.fromVertex.node && e.fromVertex.node.isLinkLabel) {
+            e.portFromPos = vertical ? e.fromVertex.focusX : e.fromVertex.focusY;
+          }
+          if (e.toVertex.node && e.toVertex.node.isLinkLabel) {
+            e.portToPos = vertical ? e.toVertex.focusX : e.toVertex.focusY;
+          }
+        })
+      }
+
+      commitNodes() {
+        super.commitNodes();
+
+        const positioned = new Set();
+        const horiz = this.direction == 0.0 || this.direction == 180.0;
+
+        // Position spouses in a tight cluster (Spouse Clustering)
+        this.network.vertexes.each(v => {
+          if (v.node === null) return;
+          if (!v.node.isLinkLabel) return;
+          const labnode = v.node;
+          const lablink = labnode.labeledLink;
+
+          lablink.invalidateRoute();
+          let spouseA = lablink.fromNode;
+          let spouseB = lablink.toNode;
+
+          if (!spouseA || !spouseB) return;
+
+          // Force spouseA to be husband (M), spouseB to be wife (F)
+          if (spouseA.data.gender === "F") {
+            const temp = spouseA;
+            spouseA = spouseB;
+            spouseB = temp;
+          }
+
+          if (!positioned.has(spouseA)) {
+            // Find all wives of this husband
+            const wives = [];
+            spouseA.linksConnected.each(l => {
+              if (l.category === "Marriage") {
+                const other = (l.fromNode === spouseA) ? l.toNode : l.fromNode;
+                if (other && other !== spouseA && !wives.includes(other)) {
+                  wives.push(other);
+                }
+              }
+            });
+            wives.sort((w1, w2) => w1.data.id - w2.data.id);
+
+            // Center husband and spread wives to both sides (Wife 1 on left, others on right)
+            let shiftLeft = 0;
+            if (wives.length > 1 && wives[0]) {
+              shiftLeft = wives[0].actualBounds.width + this.spouseSpacing;
+            }
+
+            spouseA.moveTo(v.x + shiftLeft, v.y);
+            positioned.add(spouseA);
+
+            if (wives.length === 1) {
+              const w = wives[0];
+              if (!positioned.has(w)) {
+                w.moveTo(spouseA.position.x + spouseA.actualBounds.width + this.spouseSpacing, spouseA.position.y);
+                positioned.add(w);
+              }
+            } else if (wives.length >= 2) {
+              // Wife 1 on the left
+              const w1 = wives[0];
+              if (!positioned.has(w1)) {
+                w1.moveTo(spouseA.position.x - w1.actualBounds.width - this.spouseSpacing, spouseA.position.y);
+                positioned.add(w1);
+              }
+              // Wife 2 on the right
+              const w2 = wives[1];
+              if (!positioned.has(w2)) {
+                w2.moveTo(spouseA.position.x + spouseA.actualBounds.width + this.spouseSpacing, spouseA.position.y);
+                positioned.add(w2);
+              }
+              // Wife 3+ further to the right
+              let currentX = spouseA.position.x + spouseA.actualBounds.width + this.spouseSpacing + w2.actualBounds.width + this.spouseSpacing;
+              for (let i = 2; i < wives.length; i++) {
+                const w = wives[i];
+                if (!positioned.has(w)) {
+                  w.moveTo(currentX, spouseA.position.y);
+                  positioned.add(w);
+                  currentX += w.actualBounds.width + this.spouseSpacing;
+                }
+              }
+            }
+          }
+          lablink.ensureBounds();
+        });
+
+        // Position remaining unmarried nodes
+        this.network.vertexes.each(v => {
+          if (v.node !== null && !v.node.isLinkLabel && !positioned.has(v.node)) {
+            v.node.position = new go.Point(v.x, v.y);
+          }
+        });
+      }
+
+      findParentsMarriageLabelNode(node) {
+        const it = node.findNodesInto();
+        while (it.next()) {
+          const n = it.value;
+          if (n.isLinkLabel) return n;
+        }
+        return null;
+      }
+    }
+
+    // ============================================
+    // 1. GOJS THEME & HELPERS
+    // ============================================
+    const nameProperty = "name";
+    const genderProperty = "gender";
+    const statusProperty = "status";
+    const countProperty = "count";
+
+    const theme = {
+      colors: {
+        // Chuyển sang tone Đỏ bã trầu (Nữ) và Xanh rêu/Xám trầm (Nam)
+        femaleBadgeBackground: "#f9ebea",
+        maleBadgeBackground: "#eef2f3",
+        femaleBadgeText: "#7b241c",
+        maleBadgeText: "#1f618d",
+        kingQueenBorder: "#cca625", // Đồng bộ vàng kim
+        princePrincessBorder: "#d4ac0d",
+        civilianBorder: "#95a5a6",
+        personText: "#1a0000",
+        personNodeBackground: "#FFFFFF",
+        selectionStroke: "#cca625",
+        counterBackground: "#ffffff", // Đổi nền nút Expand thành trắng
+        counterBorder: "#cca625", // Viền nút Expand màu vàng kim
+        counterText: "#5c0606",
+        link: "#8a7b66", // Làm dịu màu đường nối huyết thống
+      },
+      fonts: {
+        badgeFont: "600 11px Inter",
+        birthDeathFont: "12px Inter", // Nhỏ hơn font tên
+        nameFont: "bold 17px Playfair Display", // Chuyển font tên sang serif để trang trọng hơn
+        counterFont: "bold 14px Inter",
+      },
+    };
+
+    const onMouseEnterPart = (e, part) => {
+      if (!relationSelectionMode) part.isHighlighted = true;
+    };
+    const onMouseLeavePart = (e, part) => {
+      const selected = gpDiagram ? gpDiagram.selection.first() : null;
+      if (selected !== part) part.isHighlighted = false;
+    };
+
+    const STROKE_WIDTH = 3;
+    const CORNER_ROUNDNESS = 12;
+    const IMAGE_TOP_MARGIN = 20;
+
+    const getStrokeForNode = (data) => {
+      if (data.isAlive === false) return "#94a3b8"; // Mất: viền xám
+      if (data.status === "king" || data.status === "prince") {
+        return "#FEBA00"; // Tộc trưởng / Trưởng họ / Trưởng nhánh: viền vàng kim
+      }
+      return data.gender === "M" ? "#2b6cb0" : "#b83280"; // Sống: Nam xanh, Nữ hồng
+    };
+
+    const statusStrokeBinding = () =>
+      new go.Binding("stroke", "", (data) => getStrokeForNode(data));
+
+    const highlightStrokeBinding = () =>
+      new go.Binding("stroke", "isHighlighted", (isHighlighted, obj) =>
+        isHighlighted
+          ? theme.colors.selectionStroke
+          : getStrokeForNode(obj.part.data)
+      ).ofObject();
+
+    const getBadgeText = (data) => {
+      if (data.status === "king") return "Tộc Trưởng";
+      if (data.status === "prince") return "Trưởng Nhánh";
+      return data.gender === "M" ? "Nam" : "Nữ";
+    };
+    const getBadgeFill = (data) => {
+      if (data.status === "king") return "#800000"; // Royal Red
+      if (data.status === "prince") return "#cca625"; // Gold
+      return data.gender === "M" ? theme.colors.maleBadgeBackground : theme.colors.femaleBadgeBackground;
+    };
+    const getBadgeTextColor = (data) => {
+      if (data.status === "king" || data.status === "prince") return "#ffffff"; // White text
+      return data.gender === "M" ? theme.colors.maleBadgeText : theme.colors.femaleBadgeText;
+    };
+
+    // ============================================
+    // 2. GOJS NODE TEMPLATE PARTS
+    // ============================================
+    const personBadge = () =>
+      new go.Panel("Auto", {
+        alignmentFocus: go.Spot.TopRight,
+        alignment: new go.Spot(1, 0, -15, STROKE_WIDTH - 0.5),
+      })
+        .add(
+          new go.Shape({
+            figure: "RoundedRectangle",
+            parameter1: CORNER_ROUNDNESS,
+            parameter2: 4 | 8,
+            desiredSize: new go.Size(NaN, 22.5),
+            stroke: null,
+          }).bind("fill", "", getBadgeFill)
+        )
+        .add(
+          new go.TextBlock({
+            font: theme.fonts.badgeFont,
+            margin: new go.Margin(0, 8, 0, 8)
+          })
+            .bind("stroke", "", getBadgeTextColor)
+            .bind("text", "", getBadgeText)
+        );
+
+    const personBirthDeathTextBlock = () =>
+      new go.TextBlock({
+        stroke: theme.colors.personText,
+        font: theme.fonts.birthDeathFont,
+        alignmentFocus: go.Spot.Top,
+        alignment: new go.Spot(0.5, 1, 0, -35),
+      }).bind("text", "dob");
+
+    function countChildren(node) {
+      if (!(node instanceof go.Node)) return 0;
+      let count = 0;
+      node.linksConnected.each(l => {
+        if (l.category === "Marriage") {
+          const labelNode = l.labelNodes.first();
+          if (labelNode) {
+            count += labelNode.findNodesOutOf().count;
+          }
+        }
+      });
+      return count;
+    }
+
+    // Expand/Collapse pill button under node (SRS Specification)
+    const expandCollapseButton = () =>
+      new go.Panel("Auto", {
+        alignmentFocus: go.Spot.Center,
+        alignment: new go.Spot(0.5, 1, 0, 0), // Cân bằng ở mép dưới thẻ
+        cursor: "pointer",
+        click: (e, obj) => {
+          e.handled = true;
+          const node = obj.part;
+          const diagram = node.diagram;
+          if (!diagram) return;
+          diagram.startTransaction("toggleExpand");
+          const data = node.data;
+          const nextState = data.isExpanded === false;
+          diagram.model.setDataProperty(data, "isExpanded", nextState);
+          setPersonVisibility(node, nextState);
+          diagram.commitTransaction("toggleExpand");
+        }
+      })
+        .bindObject("visible", "", (node) => countChildren(node) > 0)
+        .add(
+          new go.Shape("Circle", {
+            desiredSize: new go.Size(26, 26),
+            fill: theme.colors.counterBackground,
+            stroke: theme.colors.counterBorder,
+            strokeWidth: 1.5,
+            shadowVisible: true,
+            shadowColor: "rgba(0, 0, 0, 0.1)",
+            shadowOffset: new go.Point(0, 2),
+            shadowBlur: 4
+          })
+        )
+        .add(
+          new go.TextBlock({
+            alignment: go.Spot.Center,
+            stroke: theme.colors.counterText,
+            font: theme.fonts.counterFont,
+            textAlign: "center",
+            margin: new go.Margin(1, 0, 0, 0) // Căn chỉnh chữ ra giữa hình tròn
+          }).bind("text", (data, textBlock) => {
+            const node = textBlock.part;
+            const count = countChildren(node);
+            return data.isExpanded === false ? "+" : "-";
+          })
+        );
+
+    const imageSourceBinding = () =>
+      new go.Binding("source", "", ({ status, gender }) => {
+        switch (status) {
+          case "king":
+          case "queen":
+            return "./images/king.svg";
+          case "prince":
+          case "princess":
+            return "./images/prince.svg";
+          case "civilian":
+            return gender === "M"
+              ? "./images/male-civilian.svg"
+              : "./images/female-civilian.svg";
+          default:
+            return "./images/male-civilian.svg";
+        }
+      });
+
+    const imageSizeBinding = () =>
+      new go.Binding("desiredSize", "status", (status) => {
+        switch (status) {
+          case "king":
+          case "queen":
+            return new go.Size(30, 20);
+          case "prince":
+          case "princess":
+            return new go.Size(28, 20);
+          case "civilian":
+          default:
+            return new go.Size(24, 24);
+        }
+      });
+
+    const personImage = () =>
+      new go.Panel("Spot", {
+        alignmentFocus: go.Spot.Top,
+        alignment: new go.Spot(0, 0, STROKE_WIDTH / 2, IMAGE_TOP_MARGIN),
+      })
+        .add(
+          new go.Picture({ width: 55, height: 55 })
+            .bind("source", "photo", (p) => p || "assets/img/avata.jpg")
+        )
+        .add(
+          new go.Picture({ scale: 0.9 })
+            .bind(imageSourceBinding())
+            .bind(imageSizeBinding())
+        );
+
+    const personMainShape = () =>
+      new go.Shape({
+        figure: "RoundedRectangle",
+        desiredSize: new go.Size(215, 110),
+        fill: theme.colors.personNodeBackground,
+        portId: "",
+        parameter1: CORNER_ROUNDNESS,
+        strokeWidth: STROKE_WIDTH,
+      })
+        .bind(statusStrokeBinding())
+        .bind(highlightStrokeBinding())
+        .bind(new go.Binding("strokeWidth", "isHighlighted", (h) => h ? 5 : STROKE_WIDTH).ofObject());
+
+    const personNameTextBlock = () =>
+      new go.TextBlock({
+        stroke: theme.colors.personText,
+        font: theme.fonts.nameFont,
+        desiredSize: new go.Size(160, 50),
+        overflow: go.TextOverflow.Ellipsis,
+        textAlign: "center",
+        verticalAlignment: go.Spot.Center,
+        alignmentFocus: go.Spot.Top,
+        alignment: new go.Spot(0.5, 0, 0, 25),
+      }).bind("text", nameProperty);
+
+    const createNodeTemplate = () =>
+      new go.Node("Spot", {
+        selectionAdorned: false,
+        mouseEnter: onMouseEnterPart,
+        mouseLeave: onMouseLeavePart,
+        shadowVisible: true,
+        shadowColor: "rgba(0, 0, 0, 0.15)",
+        shadowOffset: new go.Point(2, 4),
+        shadowBlur: 8,
+        click: (e, node) => {
+          if (relationSelectionMode) {
+            handleRelationClick(node);
+          } else {
+            gpShowPopup(node.data);
+          }
+        },
+      })
+        .bind("visible", "visible", (v) => v !== false)
+        .add(
+          new go.Panel("Spot")
+            .add(personMainShape())
+            .add(personNameTextBlock())
+            .add(personBirthDeathTextBlock())
+        )
+        .add(personImage())
+        .add(personBadge())
+        .add(expandCollapseButton());
+
+    const createLinkTemplate = () =>
+      new go.Link({
+        selectionAdorned: false,
+        routing: go.Routing.AvoidsNodes, // AvoidsNodes for blood lines
+        corner: 10,
+        layerName: "Background",
+        mouseEnter: onMouseEnterPart,
+        mouseLeave: onMouseLeavePart,
+      })
+        .bind("visible", "visible", (v) => v !== false)
+        .add(
+          new go.Shape({
+            stroke: theme.colors.link,
+            strokeWidth: 1.5,
+          })
+            .bindObject("stroke", "isHighlighted", (isHighlighted) =>
+              isHighlighted ? "#ffc107" : theme.colors.link
+            )
+            .bindObject("strokeWidth", "isHighlighted", (isHighlighted) =>
+              isHighlighted ? 3 : 1.5
+            )
+        );
+
+    // ============================================
+    // 3. FAMILY DATA SYSTEM - GRAPH LINKS MODEL (15 GENERATIONS)
+    // ============================================
+    // ============================================
+    // SYSTEM FAMILY DATA - GRAPH LINKS MODEL (15 GENERATIONS DETAILED)
+    // Nút giao hôn nhân (LinkLabel) xử lý đa thê và phân nhánh con chính xác
+    // ============================================
+    const familyData = {
+      nodeDataArray: [
+        // --- ĐỜI 1 ---
+        { id: 1, name: "Trần Thế Anh", gender: "M", status: "king", title: "Thủy Tổ - Đời 1", dob: "1630 - 1702", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Thế Anh", dobSolar: "15/05/1630", dobLunar: "18/04/Canh Ngọ", dodSolar: "12/10/1702", dodLunar: "27/08/Nhâm Thìn", burialPlace: "Nghĩa trang Thượng Tổ, Đại Lộc, Quảng Nam", bio: "Thủy tổ khai sáng dòng họ Trần, đặt nền móng xây dựng tộc ước.", isExpanded: true },
+        { id: 2, name: "Lê Thị Sâm", gender: "F", status: "queen", title: "Vợ Cả - Đời 1", dob: "1635 - 1705", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "20/10/1635", dobLunar: "21/09/Ất Hợi", dodSolar: "05/06/1705", dodLunar: "19/04/Ất Mùi", burialPlace: "Nghĩa trang Thượng Tổ, Đại Lộc, Quảng Nam", bio: "Hiền thê cả, đức độ bao dung, quán xuyến việc tộc." },
+        { id: 3, name: "Nguyễn Thị Mai", gender: "F", status: "queen", title: "Vợ Thứ - Đời 1", dob: "1640 - 1710", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "08/03/1640", dobLunar: "15/02/Canh Thìn", dodSolar: "22/11/1710", dodLunar: "16/10/Canh Dần", burialPlace: "Nghĩa trang Thượng Tổ, Đại Lộc, Quảng Nam", bio: "Vợ thứ hai của cụ Tổ, mẫu mực hiền hậu." },
+        { id: 4, name: "Phạm Thị Lan", gender: "F", status: "queen", title: "Vợ Út - Đời 1", dob: "1642 - 1715", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "12/12/1642", dobLunar: "14/11/Nhâm Ngọ", dodSolar: "18/07/1715", dodLunar: "22/06/Ất Mùi", burialPlace: "Nghĩa trang Thượng Tổ, Đại Lộc, Quảng Nam", bio: "Vợ thứ ba của cụ Tổ, đồng cam cộng khổ thời kỳ khai hoang." },
+
+        // --- ĐỜI 2 (Yêu cầu: 5 người con trực hệ) ---
+        // Con của Vợ Cả (Lê Thị Sâm)
+        { id: 5, name: "Trần Hữu Đức", gender: "M", status: "prince", title: "Trưởng Họ - Đời 2", dob: "1660 - 1732", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Đức Hùng", dobSolar: "10/04/1660", dobLunar: "18/03/Canh Tý", dodSolar: "15/05/1732", dodLunar: "20/04/Nhâm Tý", burialPlace: "Từ đường dòng họ Trần", bio: "Trưởng nam đời 2, gánh vác việc thờ tự và xây dựng nhà thờ tộc.", isExpanded: true },
+        { id: 6, name: "Nguyễn Thu Hà", gender: "F", status: "princess", title: "Con Dâu Cả - Đời 2", dob: "1665 - 1740", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "22/11/1665", dobLunar: "12/10/Ất Tỵ", dodSolar: "", dodLunar: "", burialPlace: "Nghĩa trang Tộc Trần", bio: "Hiền thê cụ Hữu Đức." },
+        { id: 7, name: "Trần Hữu Minh", gender: "M", status: "civilian", title: "Đời 2 (Nhánh 2)", dob: "1663 - 1735", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Minh Trí", dobSolar: "05/06/1663", dobLunar: "29/04/Quý Mão", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Con trai thứ hai của cụ cả Lê Thị Sâm.", isExpanded: true },
+        { id: 8, name: "Lê Thị Hoa", gender: "F", status: "civilian", title: "Con Dâu - Đời 2", dob: "1668 - 1742", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "12/01/1668", dobLunar: "28/11/Đinh Mùi", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Vợ cụ Hữu Minh." },
+        { id: 9, name: "Trần Thị Thảo", gender: "F", status: "civilian", title: "Đời 2", dob: "1666 - 1730", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "15/08/1666", dobLunar: "16/07/Bính Ngọ", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Con gái cụ cả Lê Thị Sâm." },
+        // Con của Vợ Thứ (Nguyễn Thị Mai)
+        { id: 10, name: "Trần Hữu Phước", gender: "M", status: "prince", title: "Đời 2 (Nhánh 3)", dob: "1670 - 1745", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Hữu Phước", dobSolar: "15/09/1670", dobLunar: "17/08/Canh Tuất", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Con cụ hai Nguyễn Thị Mai. Người mở mang bờ cõi đất canh tác.", isExpanded: true },
+        { id: 11, name: "Vũ Thị Tuyết", gender: "F", status: "princess", title: "Con Dâu - Đời 2", dob: "1675 - 1750", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "01/01/1675", dobLunar: "29/11/Giáp Dần", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Hiền thê cụ Hữu Phước." },
+        // Con của Vợ Út (Phạm Thị Lan)
+        { id: 12, name: "Trần Hữu Nghĩa", gender: "M", status: "civilian", title: "Đời 2 (Nhánh 4)", dob: "1675 - 1748", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Nghĩa Nhân", dobSolar: "18/08/1675", dobLunar: "17/07/Ất Mão", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Con cụ ba Phạm Thị Lan. Thầy đồ dạy chữ Nho đầu tiên của làng.", isExpanded: true },
+        { id: 13, name: "Hoàng Thị Dung", gender: "F", status: "civilian", title: "Con Dâu - Đời 2", dob: "1680 - 1755", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "19/03/1680", dobLunar: "19/02/Canh Thân", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Hiền thê cụ Hữu Nghĩa." },
+
+        // --- ĐỜI 3 (Yêu cầu: 10 người con trực hệ phân bổ các nhánh) ---
+        // Nhánh cụ Hữu Đức (id 5) & Thu Hà (id 6) -> Có 3 con
+        { id: 14, name: "Trần Bảo Nam", gender: "M", status: "civilian", title: "Đời 3 (Trưởng Nhánh)", dob: "1690 - 1765", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Bảo Nam", dobSolar: "20/02/1690", dobLunar: "01/01/Canh Ngọ", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc, Quảng Nam", bio: "Cháu đích tôn Thủy Tổ, tiếp tục phát triển kinh tế gia tộc.", isExpanded: true },
+        { id: 15, name: "Phan Thị Diệu", gender: "F", status: "civilian", title: "Con Dâu - Đời 3", dob: "1695 - 1770", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "05/02/1695", dobLunar: "01/01/Ất Hợi", dodSolar: "", dodLunar: "", burialPlace: "Đại Lộc", bio: "Chính thất cụ Bảo Nam." },
+        { id: 16, name: "Trần Bảo Quốc", gender: "M", status: "civilian", title: "Đời 3", dob: "1692 - 1760", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "12/05/1692", dobLunar: "27/03/Nhâm Thân", bio: "Lập nghiệp phương xa, giữ mối liên hệ dòng tộc." },
+        { id: 17, name: "Trần Khánh Vy", gender: "F", status: "civilian", title: "Đời 3", dob: "1695 - 1750", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "15/07/1695", dobLunar: "02/06/Ất Hợi", bio: "Con gái cụ Hữu Đức." },
+        // Nhánh cụ Hữu Minh (id 7) & Lê Thị Hoa (id 8) -> Có 3 con
+        { id: 18, name: "Trần Minh Triết", gender: "M", status: "civilian", title: "Đời 3", dob: "1695 - 1772", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "05/12/1695", dobLunar: "12/11/Ất Hợi", bio: "Đội trưởng nghĩa binh bảo vệ xóm làng." },
+        { id: 19, name: "Trần Minh Tâm", gender: "M", status: "civilian", title: "Đời 3", dob: "1698 - 1766", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "19/04/1698", dobLunar: "09/03/Mậu Dần", bio: "Chuyên tâm nông nghiệp, tích trữ lương thực cho tộc." },
+        { id: 20, name: "Trần Thu Thủy", gender: "F", status: "civilian", title: "Đời 3", dob: "1700 - 1760", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "22/10/1700", dobLunar: "11/09/Canh Thin", bio: "Con gái cụ Hữu Minh." },
+        // Nhánh cụ Hữu Phước (id 10) & Vũ Thị Tuyết (id 11) -> Có 2 con
+        { id: 21, name: "Trần Quang Hải", gender: "M", status: "civilian", title: "Đời 3", dob: "1702 - 1775", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "14/03/1702", dobLunar: "16/02/Nhâm Ngọ", bio: "Phụ trách ban khánh tiết và lễ nghi dòng họ." },
+        { id: 22, name: "Trần Ngọc Anh", gender: "F", status: "civilian", title: "Đời 3", dob: "1705 - 1765", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "20/07/1705", dobLunar: "29/05/Ất Dậu", bio: "Con gái cụ Hữu Phước." },
+        // Nhánh cụ Hữu Nghĩa (id 12) & Hoàng Thị Dung (id 13) -> Có 2 con
+        { id: 23, name: "Trần Tiến Đạt", gender: "M", status: "civilian", title: "Đời 3", dob: "1708 - 1780", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "01/09/1708", dobLunar: "16/07/Mậu Tý", bio: "Đỗ tú tài, tiếp nối sự nghiệp dạy học của cha." },
+        { id: 24, name: "Trần Thục Quyên", gender: "F", status: "civilian", title: "Đời 3", dob: "1710 - 1772", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "11/11/1710", dobLunar: "20/09/Canh Dần", bio: "Con gái cụ Hữu Nghĩa." },
+
+        // --- ĐỜI 4 (Duy trì mạch trực hệ lớn phát triển đến đời 15) ---
+        { id: 25, name: "Trần Hữu Khang", gender: "M", status: "civilian", title: "Đời 4", dob: "1720 - 1795", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "12/03/1720", dobLunar: "04/02/Canh Tý", burialPlace: "Đại Lộc, Quảng Nam", bio: "Xây dựng hệ thống thủy lợi ruộng tộc.", isExpanded: true },
+        { id: 26, name: "Võ Thị Hoàng", gender: "F", status: "civilian", title: "Con Dâu - Đời 4", dob: "1725 - 1800", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "19/08/1725", dobLunar: "11/07/Ất Tỵ", burialPlace: "Đại Lộc, Quảng Nam" },
+
+        // --- ĐỜI 5 (ĐA THÊ) ---
+        { id: 27, name: "Trần Hữu Trí", gender: "M", status: "civilian", title: "Đời 5", dob: "1750 - 1825", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Trí Tuệ", dobSolar: "01/01/1750", dobLunar: "24/11/Kỷ Tỵ", burialPlace: "Đại Lộc, Quảng Nam", bio: "Thầy thuốc nho y nổi tiếng, cứu giúp nhiều người nghèo.", isExpanded: true },
+        { id: 28, name: "Đặng Thị Quy", gender: "F", status: "civilian", title: "Vợ Cả - Đời 5", dob: "1753 - 1810", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "14/05/1753", dobLunar: "12/04/Quý Dậu", burialPlace: "Nghĩa trang Tộc Trần" },
+        { id: 29, name: "Bùi Thị Nguyệt", gender: "F", status: "civilian", title: "Vợ Thứ - Đời 5", dob: "1758 - 1830", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "23/09/1758", dobLunar: "22/08/Mậu Dần", burialPlace: "Nghĩa trang Tộc Trần" },
+
+        // --- ĐỜI 6 (Con cụ cả Đặng Thị Quy) ---
+        { id: 30, name: "Trần Hữu Tâm", gender: "M", status: "civilian", title: "Đời 6", dob: "1780 - 1855", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "15/07/1780", dobLunar: "14/06/Canh Tý", burialPlace: "Đại Lộc, Quảng Nam", bio: "Kế thừa tiệm thuốc, lập quỹ cứu tế dòng họ.", isExpanded: true },
+        { id: 31, name: "Hồ Thị Xuân", gender: "F", status: "civilian", title: "Con Dâu - Đời 6", dob: "1785 - 1860", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "09/02/1785", dobLunar: "01/01/Ất Tỵ", burialPlace: "Đại Lộc, Quảng Nam" },
+
+        // --- ĐỜI 7 ---
+        { id: 32, name: "Trần Hữu Long", gender: "M", status: "civilian", title: "Đời 7", dob: "1810 - 1885", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "11/11/1810", dobLunar: "15/10/Canh Ngọ", burialPlace: "Đại Lộc, Quảng Nam", bio: "Hương sư đức độ, trùng tu văn bia từ đường.", isExpanded: true },
+        { id: 33, name: "Trịnh Thị Thu", gender: "F", status: "civilian", title: "Con Dâu - Đời 7", dob: "1815 - 1890", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "05/04/1815", dobLunar: "26/02/Ất Hợi", burialPlace: "Đại Lộc, Quảng Nam" },
+
+        // --- ĐỜI 8 ---
+        { id: 34, name: "Trần Hữu Đạt", gender: "M", status: "civilian", title: "Đời 8", dob: "1840 - 1915", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Đạt Tiến", dobSolar: "20/08/1840", dobLunar: "23/07/Canh Tý", burialPlace: "Huyện Đại Lộc, Quảng Nam", bio: "Đạt học vị Tú tài, có công mở lớp dạy chữ cho con em trong tộc.", isExpanded: true },
+        { id: 35, name: "Mai Thị Liên", gender: "F", status: "civilian", title: "Con Dâu - Đời 8", dob: "1845 - 1920", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "12/01/1845", dobLunar: "05/12/Giáp Thìn", burialPlace: "Huyện Đại Lộc, Quảng Nam" },
+
+        // --- ĐỜI 9 ---
+        { id: 36, name: "Trần Hữu Vĩnh", gender: "M", status: "civilian", title: "Đời 9", dob: "1870 - 1945", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Vĩnh An", dobSolar: "03/06/1870", dobLunar: "05/05/Canh Ngọ", burialPlace: "Đại Lộc, Quảng Nam", bio: "Vận động phong trào duy tân, hiến đất xây nghĩa trang tộc.", isExpanded: true },
+        { id: 37, name: "Đỗ Thị Phúc", gender: "F", status: "civilian", title: "Con Dâu - Đời 9", dob: "1875 - 1950", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "27/12/1875", dobLunar: "30/11/Ất Hợi", burialPlace: "Đại Lộc, Quảng Nam" },
+
+        // --- ĐỜI 10 (ĐA THÊ) ---
+        { id: 38, name: "Trần Hữu Tiến", gender: "M", status: "civilian", title: "Đời 10", dob: "1900 - 1975", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Tiến Bộ", dobSolar: "14/02/1900", dobLunar: "15/01/Canh Tý", burialPlace: "Huyện Đại Lộc, Quảng Nam", bio: "Chiến sĩ cách mạng trung kiên, giữ vững liên lạc thời kỳ khó khăn.", isExpanded: true },
+        { id: 39, name: "Lý Thị Lành", gender: "F", status: "civilian", title: "Vợ Cả - Đời 10", dob: "1903 - 1960", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "09/08/1903", dobLunar: "17/06/Quý Mão", burialPlace: "Đại Lộc, Quảng Nam" },
+        { id: 40, name: "Phan Thị Ngọt", gender: "F", status: "civilian", title: "Vợ Thứ - Đời 10", dob: "1908 - 1985", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "11/04/1908", dobLunar: "11/03/Mậu Thân", burialPlace: "Đại Lộc, Quảng Nam" },
+
+        // --- ĐỜI 11 (Con cụ cả Lý Thị Lành) ---
+        { id: 41, name: "Trần Hữu Hải", gender: "M", status: "civilian", title: "Đời 11", dob: "1930 - 2005", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "Hải Đường", dobSolar: "05/05/1930", dobLunar: "08/04/Canh Ngọ", burialPlace: "Nghĩa trang Hòa Khương, Đà Nẵng", bio: "Kỹ sư cơ khí, đóng góp khôi phục sản xuất sau chiến tranh.", isExpanded: true },
+        { id: 42, name: "Ngô Thị Thanh", gender: "F", status: "civilian", title: "Con Dâu - Đời 11", dob: "1935 - 2018", isAlive: false, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "12/09/1935", dobLunar: "15/08/Ất Hợi", burialPlace: "Nghĩa trang Hòa Khương, Đà Nẵng" },
+
+        // --- ĐỜI 12 ---
+        { id: 43, name: "Trần Hữu Sơn", gender: "M", status: "civilian", title: "Đời 12", dob: "1960 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "Sơn Hà", dobSolar: "21/03/1960", dobLunar: "24/02/Canh Tý", burialPlace: "", bio: "Cán bộ hưu trí ngành giáo dục, tích cực hoạt động khuyến học tại Liên Chiểu, Đà Nẵng.", isExpanded: true },
+        { id: 44, name: "Trần Thị Minh", gender: "F", status: "civilian", title: "Con Dâu - Đời 12", dob: "1965 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "18/07/1965", dobLunar: "20/06/Ất Tỵ", burialPlace: "" },
+
+        // --- ĐỜI 13 ---
+        { id: 45, name: "Trần Hữu Huy", gender: "M", status: "civilian", title: "Đời 13", dob: "1988 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "Quang Huy", dobSolar: "14/07/1988", dobLunar: "01/06/Mậu Thìn", burialPlace: "", bio: "Kỹ sư kiến trúc hệ thống cao cấp tại Đà Nẵng.", isExpanded: true },
+        { id: 46, name: "Phạm Ngọc Huyền", gender: "F", status: "civilian", title: "Con Dâu - Đời 13", dob: "1992 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "05/12/1992", dobLunar: "12/11/Nhâm Thân", burialPlace: "" },
+
+        // --- ĐỜI 14 ---
+        { id: 47, name: "Trần Bảo Lâm", gender: "M", status: "civilian", title: "Đời 14", dob: "2012 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "Bảo Lâm", dobSolar: "10/10/2012", dobLunar: "25/08/Nhâm Thìn", burialPlace: "", bio: "Học sinh xuất sắc, đạt nhiều giải thưởng học thuật tại Đà Nẵng.", isExpanded: true },
+        { id: 48, name: "Lê Thu Thảo", gender: "F", status: "civilian", title: "Con Dâu Tương Lai - Đời 14", dob: "2014 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "", dobSolar: "01/01/2014", dobLunar: "01/12/Quý Tỵ", burialPlace: "" },
+
+        // --- ĐỜI 15 ---
+        { id: 49, name: "Trần Minh Khôi", gender: "M", status: "civilian", title: "Hậu Duệ - Đời 15", dob: "2034 - nay", isAlive: true, photo: "assets/img/avata.jpg", courtesyName: "Minh Khôi", dobSolar: "01/06/2034", dobLunar: "15/04/Giáp Dần", burialPlace: "", bio: "Thành viên hậu duệ đời thứ 15 trực hệ dòng họ Trần tại Liên Chiểu." },
+
+        // ============================================
+        // MARRIAGE LABEL NODES (Nút thắt hôn nhân ẩn)
+        // ============================================
+        { id: "M1_2", category: "LinkLabel" },   // Thủy tổ - Vợ Cả
+        { id: "M1_3", category: "LinkLabel" },   // Thủy tổ - Vợ Thứ
+        { id: "M1_4", category: "LinkLabel" },   // Thủy tổ - Vợ Út
+        { id: "M5_6", category: "LinkLabel" },   // Đời 2 - Nhánh Trưởng
+        { id: "M7_8", category: "LinkLabel" },   // Đời 2 - Nhánh Thứ 2
+        { id: "M10_11", category: "LinkLabel" }, // Đời 2 - Nhánh Thứ 3
+        { id: "M12_13", category: "LinkLabel" }, // Đời 2 - Nhánh Thứ 4
+        { id: "M14_15", category: "LinkLabel" }, // Đời 3 - Trưởng hệ
+        { id: "M25_26", category: "LinkLabel" }, // Đời 4
+        { id: "M27_28", category: "LinkLabel" }, // Đời 5 - Vợ Cả
+        { id: "M27_29", category: "LinkLabel" }, // Đời 5 - Vợ Thứ
+        { id: "M30_31", category: "LinkLabel" }, // Đời 6
+        { id: "M32_33", category: "LinkLabel" }, // Đời 7
+        { id: "M34_35", category: "LinkLabel" }, // Đời 8
+        { id: "M36_37", category: "LinkLabel" }, // Đời 9
+        { id: "M38_39", category: "LinkLabel" }, // Đời 10 - Vợ Cả
+        { id: "M38_40", category: "LinkLabel" }, // Đời 10 - Vợ Thứ
+        { id: "M41_42", category: "LinkLabel" }, // Đời 11
+        { id: "M43_44", category: "LinkLabel" }, // Đời 12
+        { id: "M45_46", category: "LinkLabel" }, // Đời 13
+        { id: "M47_48", category: "LinkLabel" }  // Đời 14
+      ],
+      linkDataArray: [
+        // ============================================
+        // MARRIAGE LINKS (Đường nối hôn nhân ngang - màu vàng)
+        // ============================================
+        { from: 1, to: 2, labelKeys: ["M1_2"], category: "Marriage" },
+        { from: 1, to: 3, labelKeys: ["M1_3"], category: "Marriage" },
+        { from: 1, to: 4, labelKeys: ["M1_4"], category: "Marriage" },
+        { from: 5, to: 6, labelKeys: ["M5_6"], category: "Marriage" },
+        { from: 7, to: 8, labelKeys: ["M7_8"], category: "Marriage" },
+        { from: 10, to: 11, labelKeys: ["M10_11"], category: "Marriage" },
+        { from: 12, to: 13, labelKeys: ["M12_13"], category: "Marriage" },
+        { from: 14, to: 15, labelKeys: ["M14_15"], category: "Marriage" },
+        { from: 25, to: 26, labelKeys: ["M25_26"], category: "Marriage" },
+        { from: 27, to: 28, labelKeys: ["M27_28"], category: "Marriage" },
+        { from: 27, to: 29, labelKeys: ["M27_29"], category: "Marriage" },
+        { from: 30, to: 31, labelKeys: ["M30_31"], category: "Marriage" },
+        { from: 32, to: 33, labelKeys: ["M32_33"], category: "Marriage" },
+        { from: 34, to: 35, labelKeys: ["M34_35"], category: "Marriage" },
+        { from: 36, to: 37, labelKeys: ["M36_37"], category: "Marriage" },
+        { from: 38, to: 39, labelKeys: ["M38_39"], category: "Marriage" },
+        { from: 38, to: 40, labelKeys: ["M38_40"], category: "Marriage" },
+        { from: 41, to: 42, labelKeys: ["M41_42"], category: "Marriage" },
+        { from: 43, to: 44, labelKeys: ["M43_44"], category: "Marriage" },
+        { from: 45, to: 46, labelKeys: ["M45_46"], category: "Marriage" },
+        { from: 47, to: 48, labelKeys: ["M47_48"], category: "Marriage" },
+
+        // ============================================
+        // DESCENT LINKS (Đường kẻ huyết thống dọc xuống)
+        // ============================================
+        // Từ Đời 1 xuống Đời 2 (5 con phân bổ chuẩn xác theo mẹ)
+        { from: "M1_2", to: 5, category: "Descent" },    // Trần Hữu Đức (Con mẹ Sâm)
+        { from: "M1_2", to: 7, category: "Descent" },    // Trần Hữu Minh (Con mẹ Sâm)
+        { from: "M1_2", to: 9, category: "Descent" },    // Trần Thị Thảo (Con mẹ Sâm)
+        { from: "M1_3", to: 10, category: "Descent" },   // Trần Hữu Phước (Con mẹ Mai)
+        { from: "M1_4", to: 12, category: "Descent" },   // Trần Hữu Nghĩa (Con mẹ Lan)
+
+        // Từ Đời 2 xuống Đời 3 (10 con phân bổ chuẩn xác theo các cụm bố mẹ)
+        // Con cụ Hữu Đức & Nguyễn Thu Hà (3 con)
+        { from: "M5_6", to: 14, category: "Descent" },
+        { from: "M5_6", to: 16, category: "Descent" },
+        { from: "M5_6", to: 17, category: "Descent" },
+        // Con cụ Hữu Minh & Lê Thị Hoa (3 con)
+        { from: "M7_8", to: 18, category: "Descent" },
+        { from: "M7_8", to: 19, category: "Descent" },
+        { from: "M7_8", to: 20, category: "Descent" },
+        // Con cụ Hữu Phước & Vũ Thị Tuyết (2 con)
+        { from: "M10_11", to: 21, category: "Descent" },
+        { from: "M10_11", to: 22, category: "Descent" },
+        // Con cụ Hữu Nghĩa & Hoàng Thị Dung (2 con)
+        { from: "M12_13", to: 23, category: "Descent" },
+        { from: "M12_13", to: 24, category: "Descent" },
+
+        // Mạch trực hệ chính nối tiếp chạy dài xuống Đời 15
+        { from: "M14_15", to: 25, category: "Descent" },  // Đời 3 -> Đời 4
+        { from: "M25_26", to: 27, category: "Descent" },  // Đời 4 -> Đời 5
+        { from: "M27_28", to: 30, category: "Descent" },  // Đời 5 (Vợ cả Quy) -> Đời 6
+        { from: "M30_31", to: 32, category: "Descent" },  // Đời 6 -> Đời 7
+        { from: "M32_33", to: 34, category: "Descent" },  // Đời 7 -> Đời 8
+        { from: "M34_35", to: 36, category: "Descent" },  // Đời 8 -> Đời 9
+        { from: "M36_37", to: 38, category: "Descent" },  // Đời 9 -> Đời 10
+        { from: "M38_39", to: 41, category: "Descent" },  // Đời 10 (Vợ cả Lành) -> Đời 11
+        { from: "M41_42", to: 43, category: "Descent" },  // Đời 11 -> Đời 12
+        { from: "M43_44", to: 45, category: "Descent" },  // Đời 12 -> Đời 13
+        { from: "M45_46", to: 47, category: "Descent" },  // Đời 13 -> Đời 14
+        { from: "M47_48", to: 49, category: "Descent" }   // Đời 14 -> Đời 15 (Hậu Duệ Minh Khôi)
+      ]
+    };
+
+    // ============================================
+    // 4. DIAGRAM INIT & GENOGRAM HELPERS
+    // ============================================
+    let gpDiagram = null;
+
+    // Recursive helper to set visibility of descendants
+    function setPersonVisibility(node, visible) {
+      const model = node.diagram.model;
+
+      // Toggle node visibility
+      model.setDataProperty(node.data, "visible", visible);
+
+      node.linksConnected.each(l => {
+        if (l.category === "Marriage") {
+          const spouse = (l.fromNode === node) ? l.toNode : l.fromNode;
+          const labelNode = l.labelNodes.first();
+
+          // Toggle marriage link visibility
+          model.setDataProperty(l.data, "visible", visible);
+
+          if (labelNode) {
+            // Toggle LinkLabel visibility
+            model.setDataProperty(labelNode.data, "visible", visible);
+
+            // Recurse to children
+            labelNode.findNodesOutOf().each(child => {
+              child.findLinksInto().each(pl => {
+                if (pl.fromNode === labelNode) {
+                  model.setDataProperty(pl.data, "visible", visible);
+                }
+              });
+
+              // Children are only visible if the parent is visible AND expanded
+              const childVisible = visible && node.data.isExpanded !== false;
+              setPersonVisibility(child, childVisible);
+            });
+          }
+
+          // Toggle spouse visibility
+          if (spouse && spouse !== node) {
+            model.setDataProperty(spouse.data, "visible", visible);
+          }
+        }
+      });
+    }
+
+    // Recursively expand ancestors to make sure the target node is visible
+    function expandAncestors(node) {
+      const model = node.diagram.model;
+
+      node.findNodesInto().each(parentOrLabel => {
+        if (parentOrLabel.isLinkLabel) {
+          // Set parent-child link visible
+          node.findLinksInto().each(l => {
+            if (l.fromNode === parentOrLabel) {
+              model.setDataProperty(l.data, "visible", true);
+            }
+          });
+
+          // Set parent expanded and visible, and recurse
+          parentOrLabel.findNodesInto().each(parent => {
+            model.setDataProperty(parent.data, "isExpanded", true);
+            model.setDataProperty(parent.data, "visible", true);
+
+            // Set marriage link and label node visible
+            parentOrLabel.labeledLink.labelNodes.each(ln => {
+              model.setDataProperty(ln.data, "visible", true);
+            });
+            model.setDataProperty(parentOrLabel.labeledLink.data, "visible", true);
+
+            expandAncestors(parent);
+          });
+        }
+      });
+    }
+
+    // Traverse to find direct ancestors and descendants of a node (Focus View)
+    function findAncestorsAndDescendants(node, ancestors = new Set(), descendants = new Set(), visited = new Set()) {
+      if (!node || visited.has(node)) return { ancestors, descendants };
+      visited.add(node);
+
+      // 1. Ancestors
+      node.findNodesInto().each(parentOrLabel => {
+        if (parentOrLabel.isLinkLabel) {
+          ancestors.add(parentOrLabel);
+          parentOrLabel.findNodesInto().each(p => {
+            ancestors.add(p);
+            findAncestorsAndDescendants(p, ancestors, descendants, visited);
+          });
+        }
+      });
+
+      // 2. Descendants
+      node.linksConnected.each(l => {
+        if (l.category === "Marriage") {
+          const labelNode = l.labelNodes.first();
+          if (labelNode) {
+            descendants.add(labelNode);
+            labelNode.findNodesOutOf().each(child => {
+              descendants.add(child);
+              // Include spouse of child
+              child.linksConnected.each(cl => {
+                if (cl.category === "Marriage") {
+                  const spouse = (cl.fromNode === child) ? cl.toNode : cl.fromNode;
+                  if (spouse) descendants.add(spouse);
+                }
+              });
+              findAncestorsAndDescendants(child, ancestors, descendants, visited);
+            });
+          }
+        }
+      });
+
+      return { ancestors, descendants };
+    }
+
+    // Apply Focus View highlights and opacity dimming
+    function applyFocusView(selectedNode) {
+      if (!gpDiagram) return;
+      gpDiagram.startTransaction("focusView");
+
+      if (selectedNode === null) {
+        // Reset everything
+        gpDiagram.nodes.each(n => {
+          n.opacity = 1;
+          n.isHighlighted = false;
+        });
+        gpDiagram.links.each(l => {
+          l.opacity = 1;
+          l.isHighlighted = false;
+        });
+      } else {
+        const { ancestors, descendants } = findAncestorsAndDescendants(selectedNode);
+        const relatives = new Set([...ancestors, ...descendants, selectedNode]);
+
+        // Include spouses of ancestors
+        ancestors.forEach(anc => {
+          anc.linksConnected.each(l => {
+            if (l.category === "Marriage") {
+              const spouse = (l.fromNode === anc) ? l.toNode : l.fromNode;
+              if (spouse) relatives.add(spouse);
+            }
+          });
+        });
+
+        // Highlight relatives, dim others
+        gpDiagram.nodes.each(n => {
+          if (relatives.has(n) || n.isLinkLabel) {
+            n.opacity = 1;
+            n.isHighlighted = true;
+          } else {
+            n.opacity = 0.15;
+            n.isHighlighted = false;
+          }
+        });
+
+        // Highlight descent links connecting relatives, dim others
+        gpDiagram.links.each(l => {
+          const fromRelative = relatives.has(l.fromNode) || (l.fromNode && l.fromNode.isLinkLabel);
+          const toRelative = relatives.has(l.toNode) || (l.toNode && l.toNode.isLinkLabel);
+          if (fromRelative && toRelative) {
+            l.opacity = 1;
+            l.isHighlighted = true;
+          } else {
+            l.opacity = 0.15;
+            l.isHighlighted = false;
+          }
+        });
+      }
+      gpDiagram.commitTransaction("focusView");
+    }
+
+    const initDiagram = (divId) => {
+      const genLayout = new GenogramLayout();
+      genLayout.direction = 90;
+      genLayout.layerSpacing = 30;
+      genLayout.columnSpacing = 10;
+
+      const diagram = new go.Diagram(divId, {
+        layout: genLayout,
+        "toolManager.hoverDelay": 100,
+        allowZoom: true,
+        "animationManager.isEnabled": true,
+        scrollMode: go.ScrollMode.Infinite,
+      });
+
+      // Node Template
+      diagram.nodeTemplate = createNodeTemplate();
+
+      // Node template for label node -- nothing shows
+      diagram.nodeTemplateMap.add("LinkLabel",
+        new go.Node({
+          selectable: false,
+          width: 1,
+          height: 1,
+          fromEndSegmentLength: 20
+        }).bind("visible", "visible", (v) => v !== false)
+      );
+
+      // Parent-child relationships (default)
+      diagram.linkTemplate = createLinkTemplate();
+
+      // Marriage relationships link template
+      diagram.linkTemplateMap.add("Marriage",
+        new go.Link({
+          routing: go.Routing.Orthogonal, 
+          corner: 15, // Tăng bo góc cho mềm
+          fromSpot: go.Spot.LeftRightSides,
+          toSpot: go.Spot.LeftRightSides,
+          selectable: false,
+          isTreeLink: false,
+          layerName: "Background"
+        })
+          .bind("visible", "visible", (v) => v !== false)
+          .add(
+            new go.Shape({
+              strokeWidth: 2, // Thanh mảnh hơn
+              stroke: theme.colors.selectionStroke, 
+              strokeDashArray: [5, 5] // Render nét đứt
+            })
+          )
+      );
+
+      // Use GraphLinksModel
+      diagram.model = new go.GraphLinksModel({
+        linkLabelKeysProperty: "labelKeys",
+        nodeKeyProperty: "id",
+        copiesArrays: true,
+        nodeDataArray: familyData.nodeDataArray,
+        linkDataArray: familyData.linkDataArray
+      });
+
+      // Apply initial collapse/expand state recursively
+      diagram.delayInitialization(() => {
+        diagram.nodes.each(n => {
+          if (!n.isLinkLabel) {
+            // Find root nodes (no parents)
+            const isRoot = !n.findNodesInto().any(p => p.isLinkLabel);
+            if (isRoot) {
+              setPersonVisibility(n, n.data.isExpanded !== false);
+            }
+          }
+        });
+        // Cập nhật lại khung nhìn để fix lỗi Event Listener trên Mobile/Web
+        diagram.requestUpdate();
+        diagram.layoutDiagram(true);
+      });
+
+      // Selection Listener for Auto-Focus (SRS Specification)
+      diagram.addDiagramListener("ChangedSelection", (e) => {
+        const selected = diagram.selection.first();
+        if (selected instanceof go.Node && !selected.isLinkLabel) {
+          applyFocusView(selected);
+          diagram.commandHandler.scrollToPart(selected);
+        } else {
+          applyFocusView(null);
+        }
+      });
+
+      // Khởi tạo Minimap Overview
+      new go.Overview("myOverviewDiv").observed = diagram;
+
+      gpDiagram = diagram;
+    };
+
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        initDiagram("myDiagramDiv");
+
+        // Gọi thêm hàm ép thư viện tính toán lại kích thước một lần nữa
+        if (gpDiagram) {
+          gpDiagram.requestUpdate();
+          gpDiagram.layoutDiagram(true);
+        }
+
+        // Remove GoJS evaluation watermark DOM elements
+        setTimeout(() => {
+          removeGoJSWatermark();
+        }, 500);
+
+        // Also observe for dynamically added elements
+        const observer = new MutationObserver(() => removeGoJSWatermark());
+        observer.observe(document.getElementById("myDiagramDiv"), {
+          childList: true, subtree: true
+        });
+      }, 300);
+    });
+
+    function removeGoJSWatermark() {
+      // GoJS injects anchor tags linking to gojs.net as watermark
+      document.querySelectorAll('a[href*="gojs.net"]').forEach(el => el.remove());
+      // Also remove any child divs with style containing "watermark" or "evaluation"
+      document.querySelectorAll('#myDiagramDiv div').forEach(el => {
+        const style = el.getAttribute('style') || '';
+        const text = el.textContent || '';
+        if (
+          style.includes('z-index: 20') ||
+          text.toLowerCase().includes('evaluation') ||
+          text.toLowerCase().includes('gojs')
+        ) {
+          el.style.display = 'none';
+        }
+      });
+    }
+
+    // ============================================
+    // 5. ZOOM CONTROLS
+    // ============================================
+    function gpZoomIn() {
+      if (!gpDiagram) return;
+      gpDiagram.commandHandler.increaseZoom(1.3);
+    }
+    function gpZoomOut() {
+      if (!gpDiagram) return;
+      gpDiagram.commandHandler.decreaseZoom(0.7);
+    }
+    function gpZoomFit() {
+      if (!gpDiagram) return;
+      gpDiagram.commandHandler.zoomToFit();
+    }
+    function gpCenterRoot() {
+      if (!gpDiagram) return;
+      gpDiagram.scale = 1;
+      gpDiagram.commandHandler.scrollToPart(
+        gpDiagram.findNodeForKey(1)
+      );
+    }
+
+    // ============================================
+    // 6. SEARCH
+    // ============================================
+    const searchInput = document.getElementById('gp-search-input');
+    const searchResults = document.getElementById('gp-search-results');
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.trim().toLowerCase();
+      if (query.length < 1) {
+        searchResults.classList.remove('show');
+        return;
+      }
+      const matches = familyData.nodeDataArray.filter(d =>
+        d.name && d.name.toLowerCase().includes(query) && d.category !== "LinkLabel"
+      );
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="result-item" style="color:#999;cursor:default;">Không tìm thấy</div>';
+        searchResults.classList.add('show');
+        return;
+      }
+      searchResults.innerHTML = matches.map(d =>
+        `<div class="result-item" onclick="gpGoToNode(${d.id})">
+          <i class="bi bi-person-fill"></i> ${d.name}
+          <span style="margin-left:auto;font-size:0.75rem;color:#aaa;">${d.dob || ''}</span>
+        </div>`
+      ).join('');
+      searchResults.classList.add('show');
+    });
+
+    searchInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') gpSearch();
+    });
+
+    // Close search results / mobile controls when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.gp-search-bar')) {
+        searchResults.classList.remove('show');
+      }
+
+      // Mobile only behaviors
+      if (window.innerWidth <= 768) {
+        // Close search bar overlay if clicked outside search bar and NOT clicking search toggle button
+        if (!e.target.closest('.gp-search-bar') && !e.target.closest('.gp-search-toggle-btn')) {
+          const searchBar = document.getElementById('gp-search-bar');
+          if (searchBar) searchBar.classList.remove('show');
+        }
+
+        // Close menu if clicked outside floating controls
+        const controls = document.getElementById('gp-floating-controls');
+        if (controls && !e.target.closest('#gp-floating-controls')) {
+          controls.classList.remove('expanded');
+          const icon = document.querySelector('#gp-master-btn i');
+          if (icon) icon.className = 'bi bi-sliders';
+        }
+      }
+    });
+
+    function gpSearch() {
+      const query = searchInput.value.trim().toLowerCase();
+      if (!query) return;
+      const match = familyData.nodeDataArray.find(d =>
+        d.name && d.name.toLowerCase().includes(query) && d.category !== "LinkLabel"
+      );
+      if (match) gpGoToNode(match.id);
+    }
+
+    function gpGoToNode(id) {
+      if (!gpDiagram) return;
+      searchResults.classList.remove('show');
+
+      // Close search overlay on mobile after picking a result
+      const searchBar = document.getElementById('gp-search-bar');
+      if (searchBar) searchBar.classList.remove('show');
+
+      const node = gpDiagram.findNodeForKey(id);
+      if (node) {
+        gpDiagram.startTransaction("expandAncestors");
+        expandAncestors(node);
+        gpDiagram.model.setDataProperty(node.data, "visible", true);
+        gpDiagram.commitTransaction("expandAncestors");
+
+        gpDiagram.select(node);
+        gpDiagram.commandHandler.scrollToPart(node);
+      }
+    }
+
+    // ============================================
+    // 7. NODE DETAIL BOTTOM SHEET & POPUP
+    // ============================================
+    function gpShowPopup(data) {
+      document.getElementById('popup-avatar').src = data.photo || 'assets/img/avata.jpg';
+      document.getElementById('popup-name').textContent = data.name || '—';
+
+      const badge = document.getElementById('popup-badge');
+      if (badge) {
+        if (data.gender === 'F') {
+          badge.textContent = 'Nữ';
+          badge.className = 'popup-badge female';
+        } else {
+          badge.textContent = 'Nam';
+          badge.className = 'popup-badge male';
+        }
+      }
+
+      const titleBadge = document.getElementById('popup-title-badge');
+      if (titleBadge) titleBadge.textContent = data.title || 'Thành viên';
+
+      // Tên tự
+      const courtesyRow = document.getElementById('popup-row-courtesy');
+      if (data.courtesyName) {
+        if (courtesyRow) courtesyRow.style.display = 'flex';
+        document.getElementById('popup-courtesy').textContent = data.courtesyName;
+      } else {
+        if (courtesyRow) courtesyRow.style.display = 'none';
+      }
+
+      // Ngày sinh
+      document.getElementById('popup-birth-solar').textContent = 'Dương lịch: ' + (data.dobSolar || '—');
+      document.getElementById('popup-birth-lunar').textContent = 'Âm lịch: ' + (data.dobLunar || '—');
+
+      // Ngày mất & Mộ phần (Chỉ hiện nếu đã mất)
+      const deathRow = document.getElementById('popup-row-death');
+      const burialRow = document.getElementById('popup-row-burial');
+      if (data.isAlive === false) {
+        if (deathRow) deathRow.style.display = 'flex';
+        if (burialRow) burialRow.style.display = 'flex';
+        document.getElementById('popup-death-solar').textContent = 'Dương lịch: ' + (data.dodSolar || '—');
+        document.getElementById('popup-death-lunar').textContent = 'Âm lịch: ' + (data.dodLunar || '—');
+        document.getElementById('popup-burial').textContent = data.burialPlace || '—';
+      } else {
+        if (deathRow) deathRow.style.display = 'none';
+        if (burialRow) burialRow.style.display = 'none';
+      }
+
+      // Tiểu sử
+      const bioRow = document.getElementById('popup-row-bio');
+      if (data.bio) {
+        if (bioRow) bioRow.style.display = 'flex';
+        document.getElementById('popup-bio').textContent = data.bio;
+      } else {
+        if (bioRow) bioRow.style.display = 'none';
+      }
+
+      document.getElementById('gp-popup-overlay').classList.add('show');
+    }
+
+    function gpClosePopup(event) {
+      if (event && event.target !== document.getElementById('gp-popup-overlay')) return;
+      document.getElementById('gp-popup-overlay').classList.remove('show');
+    }
+
+    // ============================================
+    // 8. THEME SWITCHER
+    // ============================================
+    function gpToggleTheme() {
+      document.getElementById('gp-theme-drawer').classList.toggle('open');
+    }
+
+    function gpSetTheme(themeName) {
+      const wrapper = document.getElementById('gia-pha-wrapper');
+      wrapper.className = 'gia-pha-wrapper theme-' + themeName;
+
+      // Update active state
+      document.querySelectorAll('.gp-theme-opt').forEach(el => el.classList.remove('active'));
+      if (themeName === 'warm-sepia') document.querySelector('.opt-sepia').classList.add('active');
+      if (themeName === 'royal-red') document.querySelector('.opt-red').classList.add('active');
+      if (themeName === 'dark-luxury') document.querySelector('.opt-dark').classList.add('active');
+
+      localStorage.setItem('giapha_desktop_theme', themeName);
+    }
+
+    // Restore saved theme
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('giapha_desktop_theme');
+      if (saved) gpSetTheme(saved);
+    });
+
+    // ============================================
+    // 9. MOBILE MENU & SEARCH TOGGLE
+    // ============================================
+    function gpToggleMenu() {
+      const controls = document.getElementById('gp-floating-controls');
+      if (!controls) return;
+      controls.classList.toggle('expanded');
+
+      const icon = document.querySelector('#gp-master-btn i');
+      if (icon) {
+        if (controls.classList.contains('expanded')) {
+          icon.className = 'bi bi-x-lg';
+        } else {
+          icon.className = 'bi bi-sliders';
+        }
+      }
+    }
+
+    function gpToggleSearch() {
+      const searchBar = document.getElementById('gp-search-bar');
+      if (!searchBar) return;
+      searchBar.classList.toggle('show');
+      if (searchBar.classList.contains('show')) {
+        setTimeout(() => {
+          const input = document.getElementById('gp-search-input');
+          if (input) input.focus();
+        }, 300);
+      }
+    }
+
+    // ============================================
+    // 10. COLLAPSE / EXPAND ALL (SRS Specification)
+    // ============================================
+    function gpExpandAll() {
+      if (!gpDiagram) return;
+      const confirmExpand = confirm("Mở rộng toàn bộ gia phả có thể ảnh hưởng đến hiệu năng trên thiết bị yếu. Bạn có muốn tiếp tục?");
+      if (!confirmExpand) return;
+
+      gpDiagram.startTransaction("expandAll");
+      gpDiagram.nodes.each(n => {
+        if (!n.isLinkLabel) {
+          gpDiagram.model.setDataProperty(n.data, "isExpanded", true);
+          gpDiagram.model.setDataProperty(n.data, "visible", true);
+        } else {
+          gpDiagram.model.setDataProperty(n.data, "visible", true);
+        }
+      });
+      gpDiagram.links.each(l => {
+        gpDiagram.model.setDataProperty(l.data, "visible", true);
+      });
+      gpDiagram.commitTransaction("expandAll");
+      gpDiagram.commandHandler.zoomToFit();
+    }
+
+    // ============================================
+    // 11. RELATION RECOGNITION (SRS Specification)
+    // ============================================
+    let relationSelectionMode = false;
+    let selectedPersonA = null;
+    let selectedPersonB = null;
+
+    function gpStartRelationCheck() {
+      relationSelectionMode = true;
+      selectedPersonA = null;
+      selectedPersonB = null;
+
+      const btn = document.getElementById('relation-btn');
+      if (btn) btn.classList.add('active');
+
+      if (gpDiagram) gpDiagram.clearSelection();
+
+      alert("Chế độ xác định quan hệ đã bật: Vui lòng chạm chọn Người thứ nhất trên sơ đồ.");
+    }
+
+    function handleRelationClick(node) {
+      if (!selectedPersonA) {
+        selectedPersonA = node;
+        alert(`Đã chọn Người thứ nhất: ${node.data.name}.\nVui lòng chạm chọn Người thứ hai.`);
+      } else if (!selectedPersonB) {
+        selectedPersonB = node;
+
+        const relationText = calculateRelation(selectedPersonA, selectedPersonB);
+
+        alert(`KẾT QUẢ XƯNG HÔ:\n\n${relationText}`);
+
+        // Reset
+        relationSelectionMode = false;
+        selectedPersonA = null;
+        selectedPersonB = null;
+        const btn = document.getElementById('relation-btn');
+        if (btn) btn.classList.remove('relation-active');
+        if (btn) btn.classList.remove('active');
+      }
+    }
+
+    function calculateRelation(nodeA, nodeB) {
+      if (nodeA === nodeB) return `${nodeA.data.name} và chính họ là cùng một người.`;
+
+      const ancestorsA = getAncestorsWithPaths(nodeA);
+      const ancestorsB = getAncestorsWithPaths(nodeB);
+
+      let lcaNode = null;
+      let minDepthSum = Infinity;
+
+      for (let idA in ancestorsA) {
+        if (ancestorsB[idA]) {
+          const sum = ancestorsA[idA].depth + ancestorsB[idA].depth;
+          if (sum < minDepthSum) {
+            minDepthSum = sum;
+            lcaNode = ancestorsA[idA].node;
+          }
+        }
+      }
+
+      if (!lcaNode) {
+        return `${nodeA.data.name} và ${nodeB.data.name} không có quan hệ huyết thống trực hệ gần trong sơ đồ này.`;
+      }
+
+      const depthA = ancestorsA[lcaNode.data.id].depth;
+      const depthB = ancestorsB[lcaNode.data.id].depth;
+
+      const nameA = nodeA.data.name;
+      const nameB = nodeB.data.name;
+
+      const genderA = nodeA.data.gender;
+      const genderB = nodeB.data.gender;
+
+      const genDiff = depthB - depthA;
+
+      function getBirthYear(data) {
+        if (!data || !data.dob) return 9999;
+        const match = data.dob.match(/\d{4}/);
+        return match ? parseInt(match[0]) : 9999;
+      }
+
+      if (genDiff === 0) {
+        if (depthA === 1) {
+          const yrA = getBirthYear(nodeA.data);
+          const yrB = getBirthYear(nodeB.data);
+          if (yrA < yrB) {
+            return `${nameA} là Anh/Chị ruột của ${nameB}.\n${nameB} gọi ${nameA} là ${genderA === "M" ? "Anh" : "Chị"}, xưng là Em.`;
+          } else {
+            return `${nameA} là Em ruột của ${nameB}.\n${nameA} gọi ${nameB} là ${genderB === "M" ? "Anh" : "Chị"}, xưng là Em.`;
+          }
+        } else {
+          const pathA = ancestorsA[lcaNode.data.id].path;
+          const pathB = ancestorsB[lcaNode.data.id].path;
+
+          const parentA = pathA[pathA.length - 2];
+          const parentB = pathB[pathB.length - 2];
+
+          if (parentA && parentB) {
+            const yrParentA = getBirthYear(parentA.data);
+            const yrParentB = getBirthYear(parentB.data);
+            if (yrParentA < yrParentB) {
+              return `${nameA} là Anh/Chị họ của ${nameB}.\n${nameB} gọi ${nameA} là ${genderA === "M" ? "Anh họ" : "Chị họ"}, xưng là Em.`;
+            } else {
+              return `${nameA} là Em họ của ${nameB}.\n${nameA} gọi ${nameB} là ${genderB === "M" ? "Anh họ" : "Chị họ"}, xưng là Em.`;
+            }
+          }
+        }
+        return `${nameA} và ${nameB} là Anh chị em họ hàng cùng thế hệ.`;
+      }
+
+      if (genDiff > 0) {
+        if (genDiff === 1) {
+          if (depthA === 0) {
+            return `${nameA} là ${genderA === "M" ? "Cha/Bố" : "Mẹ"} của ${nameB}.\n${nameB} gọi ${nameA} là ${genderA === "M" ? "Cha/Bố" : "Mẹ"}, xưng là Con.`;
+          } else {
+            const pathB = ancestorsB[lcaNode.data.id].path;
+            const parentB = pathB[pathB.length - 2];
+            const parentGender = parentB ? parentB.data.gender : "M";
+
+            const yrA = getBirthYear(nodeA.data);
+            const yrParent = parentB ? getBirthYear(parentB.data) : 9999;
+
+            if (yrA < yrParent) {
+              return `${nameA} là Bác (Anh/Chị của Cha/Mẹ) của ${nameB}.\n${nameB} gọi ${nameA} là Bác, xưng là Cháu.`;
+            } else {
+              if (parentGender === "M") {
+                return `${nameA} là ${genderA === "M" ? "Chú" : "Cô"} của ${nameB}.\n${nameB} gọi ${nameA} là ${genderA === "M" ? "Chú" : "Cô"}, xưng là Cháu.`;
+              } else {
+                return `${nameA} là ${genderA === "M" ? "Cậu" : "Dì"} của ${nameB}.\n${nameB} gọi ${nameA} là ${genderA === "M" ? "Cậu" : "Dì"}, xưng là Cháu.`;
+              }
+            }
+          }
+        } else if (genDiff === 2) {
+          return `${nameA} là ${genderA === "M" ? "Ông" : "Bà"} của ${nameB}.\n${nameB} gọi ${nameA} là ${genderA === "M" ? "Ông" : "Bà"}, xưng là Cháu.`;
+        } else {
+          return `${nameA} là Cụ/Cố của ${nameB}.\n${nameB} gọi ${nameA} là Cụ, xưng là Cháu.`;
+        }
+      }
+
+      if (genDiff < 0) {
+        const absDiff = Math.abs(genDiff);
+        if (absDiff === 1) {
+          if (depthB === 0) {
+            return `${nameA} là Con của ${nameB}.\n${nameA} gọi ${nameB} là ${genderB === "M" ? "Cha/Bố" : "Mẹ"}, xưng là Con.`;
+          } else {
+            const pathA = ancestorsA[lcaNode.data.id].path;
+            const parentA = pathA[pathA.length - 2];
+            const parentGender = parentA ? parentA.data.gender : "M";
+
+            const yrB = getBirthYear(nodeB.data);
+            const yrParent = parentA ? getBirthYear(parentA.data) : 9999;
+
+            let bRole = "";
+            if (yrB < yrParent) {
+              bRole = "Bác";
+            } else {
+              if (parentGender === "M") {
+                bRole = genderB === "M" ? "Chú" : "Cô";
+              } else {
+                bRole = genderB === "M" ? "Cậu" : "Dì";
+              }
+            }
+            return `${nameA} là Cháu của ${nameB}.\n${nameA} gọi ${nameB} là ${bRole}, xưng là Cháu.`;
+          }
+        } else if (absDiff === 2) {
+          return `${nameA} là Cháu của ${nameB}.\n${nameA} gọi ${nameB} là ${genderB === "M" ? "Ông" : "Bà"}, xưng là Cháu.`;
+        } else {
+          return `${nameA} là Cháu (hàng Chắt/Chút) của ${nameB}.\n${nameA} gọi ${nameB} là Cụ/Cố, xưng là Cháu.`;
+        }
+      }
+
+      return `${nameA} và ${nameB} có mối quan hệ dòng tộc.`;
+    }
+
+    function getAncestorsWithPaths(node) {
+      const results = {};
+      function traverse(curr, path, depth) {
+        if (!curr) return;
+        results[curr.data.id] = { node: curr, depth, path: [...path, curr] };
+
+        curr.findNodesInto().each(parentOrLabel => {
+          if (parentOrLabel.isLinkLabel) {
+            parentOrLabel.findNodesInto().each(parent => {
+              traverse(parent, [...path, curr], depth + 1);
+            });
+          }
+        });
+      }
+      traverse(node, [], 0);
+      return results;
+    }
+  </script>
+
+  <!-- Shared Bottom Navigation Bar (App-wide) -->
+  <script src="js/shared-nav.js"></script>
+
+</body>
+
+</html>
