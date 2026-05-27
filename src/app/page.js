@@ -37,6 +37,8 @@ export default function Home() {
   const formRef = useRef(null);
 
   const [dbMembers, setDbMembers] = useState([]);
+  // Lưu thông tin thành viên vừa lưu thành công (dùng cho nút báo Admin)
+  const [lastSaved, setLastSaved] = useState(null); // { id, name }
 
   // Tải danh sách thành viên từ Supabase hoặc fallback
   useEffect(() => {
@@ -245,7 +247,7 @@ export default function Home() {
     const formatDateVN = (d) => (d ? d.split("-").reverse().join("/") : "");
     const dobSolar = formatDateVN(formData.dob_solar);
     const birthYear = formData.dob_solar ? formData.dob_solar.split("-")[0] : "????";
-    
+
     let dobSummary = "";
     let dodSolar = "";
     let burialPlace = "";
@@ -294,20 +296,27 @@ export default function Home() {
   };
 
   const confirmSubmit = async () => {
+    const savedName = processedPayload?.name || '';
     try {
       console.log("Dữ liệu Node chuẩn bị gửi API:", processedPayload);
       const res = await saveFamilyMember(processedPayload);
+
       if (res && res.fallback) {
-        alert(`Đã lưu tạm thông tin thành viên "${processedPayload.name}" vào LocalStorage (Do Supabase chưa được cấu hình).`);
+        alert(`Đã lưu tạm thông tin thành viên "${savedName}" vào LocalStorage (Do Supabase chưa được cấu hình).`);
       } else {
-        alert(`Đã hoàn tất lưu trữ thông tin cho thành viên: ${processedPayload.name}`);
-      }
-      
-      // Tải lại danh sách thành viên gợi ý để cập nhật ngay lập tức
-      const data = await fetchFamilyData();
-      if (data && data.nodeDataArray) {
-        const realPeople = data.nodeDataArray.filter(n => n.category !== "LinkLabel");
-        setDbMembers(realPeople);
+        // ✅ Lưu thành công: lưu thông tin để nút báo Admin dùng
+        setLastSaved({ id: res.newMemberId, name: savedName });
+
+        // ✅ Tự động fetch lại danh sách cha/mẹ ngay lập tức (không cần reload trang)
+        try {
+          const data = await fetchFamilyData();
+          if (data && data.nodeDataArray) {
+            const realPeople = data.nodeDataArray.filter(n => n.category !== "LinkLabel");
+            setDbMembers(realPeople);
+          }
+        } catch (fetchErr) {
+          console.warn("Không thể tải lại danh sách sau khi lưu:", fetchErr);
+        }
       }
     } catch (err) {
       alert(`Đã xảy ra lỗi khi lưu thông tin: ${err.message || err}`);
@@ -476,7 +485,7 @@ export default function Home() {
         {["father", "mother", "spouse"].map((type) => {
           const label = type === "father" ? "14. Họ và tên của CHA:" : type === "mother" ? "15. Họ và tên của MẸ:" : "16. Nếu là Con Dâu/Con Rể, chọn tên Vợ/Chồng thuộc Tộc Trần:";
           const placeholder = type === "father" ? "Gõ để tìm tên Cha..." : type === "mother" ? "Gõ để tìm tên Mẹ..." : "Gõ để tìm tên Vợ hoặc Chồng...";
-          
+
           return (
             <div className="form-group" key={type}>
               <label>{label}</label>
@@ -497,7 +506,15 @@ export default function Home() {
                       onClick={() => !n.error && selectSuggestion(type, n.id, n.name)}
                       style={{ color: n.error ? "red" : "inherit" }}
                     >
-                      {n.error ? n.text : `${n.name} - Đời ${n.generation}`}
+                      {n.error ? n.text : (
+                        <>
+                          <span style={{ fontWeight: 600 }}>{n.name}</span>
+                          <span style={{ fontSize: '12px', color: '#888', marginLeft: '6px' }}>
+                            {n.generation ? `Đời ${n.generation}` : ''}
+                            {n.dobSolar ? ` · Sinh ${n.dobSolar.split('/').pop() || n.dobSolar}` : (n.dob ? ` · ${n.dob.split(' ')[0]}` : '')}
+                          </span>
+                        </>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -515,6 +532,45 @@ export default function Home() {
         <button type="submit" className="btn-submit">GỬI THÔNG TIN VÀO GIA PHẢ</button>
       </form>
 
+      {/* Thông báo lưu thành công + nút báo Admin */}
+      {lastSaved && (
+        <div style={{
+          margin: '16px 0',
+          padding: '14px 16px',
+          background: '#f0fff4',
+          border: '1px solid #68d391',
+          borderRadius: '8px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px'
+        }}>
+          <div style={{ color: '#276749', fontWeight: 600, fontSize: '15px' }}>
+            ✅ Đã lưu thành công: <span style={{ color: 'var(--primary-color)' }}>{lastSaved.name}</span>
+          </div>
+          <div style={{ color: '#555', fontSize: '13px' }}>
+            Danh sách Cha/Mẹ đã được cập nhật ngay. Bạn có thể nhập tiếp thành viên mới.
+          </div>
+          <div style={{ borderTop: '1px dashed #ccc', paddingTop: '8px', marginTop: '4px' }}>
+            <span style={{ fontSize: '13px', color: '#888' }}>Nhập sai thông tin? </span>
+            <a
+              href={`mailto:admin@trantoc.vn?subject=Yêu cầu xóa thành viên nhập sai&body=Kính gửi Admin,%0A%0ATôi vừa nhập sai thông tin và cần xóa thành viên sau:%0A%0A- Tên: ${encodeURIComponent(lastSaved.name)}%0A- ID hệ thống: ${lastSaved.id}%0A%0AXin cảm ơn!`}
+              style={{
+                color: '#c53030',
+                fontWeight: 600,
+                fontSize: '13px',
+                textDecoration: 'underline',
+                cursor: 'pointer'
+              }}
+            >
+              🚨 Bấm vào đây để báo Admin xóa
+            </a>
+            <div style={{ fontSize: '11px', color: '#aaa', marginTop: '4px' }}>
+              Mã phần tử cần xóa: <code style={{ background: '#eee', padding: '1px 5px', borderRadius: '3px' }}>{lastSaved.id}</code>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showModal && processedPayload && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -522,7 +578,7 @@ export default function Home() {
               XÁC NHẬN DỮ LIỆU
             </h3>
             <p style={{ color: "#666", fontSize: "14px", marginTop: "-5px" }}>Hệ thống đã tự động tính toán Đời và chuỗi năm sinh. Vui lòng kiểm tra lại.</p>
-            
+
             <div style={{ fontSize: "16px", lineHeight: "1.8", marginBottom: "20px", background: "#f9f9f9", padding: "10px", borderRadius: "6px", border: "1px solid #eee" }}>
               <div style={{ background: "#eef", padding: "10px", marginBottom: "10px", borderRadius: "4px" }}>
                 <b style={{ color: "var(--primary-color)" }}>Đời (Tự tính):</b> {processedPayload.title} <br />

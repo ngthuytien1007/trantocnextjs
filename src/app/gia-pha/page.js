@@ -183,17 +183,17 @@ export default function GiaPhaPage() {
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
-      
+
       <Link href="/" className="gp-home-btn">
         <i className="bi bi-house-fill"></i> Trang chủ
       </Link>
 
       {/* Search Bar */}
       <div className={`gp-search-bar ${isMobileSearchOpen ? 'show' : ''}`} id="gp-search-bar" ref={searchBarRef}>
-        <input 
+        <input
           type="text"
           id="gp-search-input"
-          placeholder="Tìm kiếm theo tên..." 
+          placeholder="Tìm kiếm theo tên..."
           autoComplete="off"
           value={searchQuery}
           onChange={handleSearchInput}
