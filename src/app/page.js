@@ -348,7 +348,7 @@ export default function Home() {
     <div className="container">
       <div className="instruction-section">
         <h2>Bảng Hướng Dẫn Từng Bước Cho Các Cụ</h2>
-        <p>Nhập sai không sao cả: Nếu lỡ bấm lưu mà thông tin bị sai, các bác cứ bỏ qua và tiến hành tạo lại một người mới chính xác hơn. Hệ thống chỉ cho nhập vào, việc sửa và xóa các bản ghi sai sẽ do Cháu Admin xử lý sau, các bác không cần bận tâm.</p>
+        <p>Nhập sai không sao cả: Nếu lỡ bấm lưu mà thông tin bị sai, các bác cứ bỏ qua và tiến hành tạo lại một người mới chính xác hơn. Hệ thống chỉ cho nhập vào, việc sửa và xóa các Thông tin bị sai sẽ do quản trị viên xử lý sau, các bác không cần bận tâm.</p>
         <ol>
           <li>Điền Thông tin cá nhân: <span>Nhập tên, chọn Giới tính và số Đời của mình.</span></li>
           <li>Chọn Ngày sinh & Ngày mất: <span>Bấm vào ô lịch để chọn đúng ngày tháng năm dương lịch, hệ thống sẽ tự tìm ngày Âm lịch chuẩn xác.</span></li>
