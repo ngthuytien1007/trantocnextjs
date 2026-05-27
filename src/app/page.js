@@ -348,236 +348,236 @@ export default function Home() {
     <div className="container">
       <div className="instruction-section">
         <h2>Bảng Hướng Dẫn Từng Bước Cho Các Cụ <br>
-            HƯỚNG DẪN NHẬP THÔNG TIN GIA PHẢ
+          HƯỚNG DẪN NHẬP THÔNG TIN GIA PHẢ
           (Dành cho điện thoại Android)
         </h2>
         <p><b>3 LƯU Ý QUAN TRỌNG TRƯỚC KHI LÀM:</b><br>
-Nhập sai không sao cả: Nếu lỡ bấm lưu mà thông tin bị sai, các bác cứ bỏ qua và tiến hành tạo lại một người mới chính xác hơn. Hệ thống chỉ cho nhập vào, việc sửa và xóa các bản ghi sai sẽ do Cháu Admin xử lý sau, các bác không cần bận tâm.<br>
+          Nhập sai không sao cả: Nếu lỡ bấm lưu mà thông tin bị sai, các bác cứ bỏ qua và tiến hành tạo lại một người mới chính xác hơn. Hệ thống chỉ cho nhập vào, việc sửa và xóa các bản ghi sai sẽ do Cháu Admin xử lý sau, các bác không cần bận tâm.<br>
 
-Chú ý khi chọn người thân: Khi chọn Cha, Mẹ, Dâu, Rể... trong danh sách, các bác nhớ nhìn kỹ để chọn đúng tên người mình vừa tạo đúng, bỏ qua những tên bị nhập sai trước đó.<br>
+            Chú ý khi chọn người thân: Khi chọn Cha, Mẹ, Dâu, Rể... trong danh sách, các bác nhớ nhìn kỹ để chọn đúng tên người mình vừa tạo đúng, bỏ qua những tên bị nhập sai trước đó.<br>
 
-Bắt buộc tải lại trang: Sau mỗi lần bấm "Lưu" hoặc "Tạo xong" một thành viên, các bác phải bấm nút Tải lại trang (nút có hình mũi tên vòng tròn ở góc trên trình duyệt điện thoại) thì hệ thống mới cập nhật tên người đó vào danh sách để chọn cho các bước tiếp theo.</p>
-        <ol>
-          <li>Điền Thông tin cá nhân: <span>Nhập tên, chọn Giới tính và số Đời của mình.</span></li>
-          <li>Chọn Ngày sinh & Ngày mất: <span>Bấm vào ô lịch để chọn đúng ngày tháng năm dương lịch, hệ thống sẽ tự tìm ngày Âm lịch chuẩn xác.</span></li>
-          <li>Chọn Tên Cha và Mẹ: <span>Bấm vào ô tìm kiếm, gõ vài chữ cái rồi lấy ngón tay chạm chọn đúng tên từ danh sách hiện ra bên dưới. Tìm đúng tên người thân trong danh sách đổ xuống (Lưu ý: Chỉ chọn người có thông tin đúng, tránh chọn nhầm người trùng tên bị sai trước đó).</span></li>
-          <li>Định vị Mộ phần: <span>Nếu thành viên đã mất, các cụ chỉ cần dùng ngón tay <b>chạm trực tiếp vào bản đồ</b> bên dưới để đánh dấu vị trí an táng chính xác.</span></li>
-          <li>Bấm Gửi thông tin để hoàn tất.</li>
-        </ol>
-      </div>
-
-      <h1>Nhập Thông Tin Thành Viên Mới</h1>
-
-      <form id="giaPhaForm" ref={formRef} onSubmit={handleSubmit}>
-        <h3>Phần A: Thông tin cơ bản</h3>
-
-        <div className="form-group">
-          <label>1. Ảnh chân dung (Nếu có):</label>
-          <input type="file" id="photo" accept="image/*" />
-          <span style={{ fontSize: "14px", color: "#666" }}>Hỗ trợ số hóa ảnh chân dung hoặc văn bia. Mặc định: ảnh trắng đen.</span>
-        </div>
-
-        <div className="form-group">
-          <label>2. Họ và tên khai sinh: <span className="required">*</span></label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Ví dụ: TRẦN VĂN AN" />
-        </div>
-
-        <div className="form-group">
-          <label>3. Tên tự / Tên hiệu (Nếu có):</label>
-          <input type="text" name="courtesyName" value={formData.courtesyName} onChange={handleChange} placeholder="Ví dụ: Thế Anh, Đức Hùng..." />
-        </div>
-
-        <div className="form-group">
-          <label>4. Giới tính: <span className="required">*</span></label>
-          <div className="radio-group">
-            <label className="radio-label">
-              <input type="radio" name="gender" value="M" checked={formData.gender === "M"} onChange={handleChange} /> Nam
-            </label>
-            <label className="radio-label">
-              <input type="radio" name="gender" value="F" checked={formData.gender === "F"} onChange={handleChange} /> Nữ
-            </label>
+              Bắt buộc tải lại trang: Sau mỗi lần bấm "Lưu" hoặc "Tạo xong" một thành viên, các bác phải bấm nút Tải lại trang (nút có hình mũi tên vòng tròn ở góc trên trình duyệt điện thoại) thì hệ thống mới cập nhật tên người đó vào danh sách để chọn cho các bước tiếp theo.</p>
+            <ol>
+              <li>Điền Thông tin cá nhân: <span>Nhập tên, chọn Giới tính và số Đời của mình.</span></li>
+              <li>Chọn Ngày sinh & Ngày mất: <span>Bấm vào ô lịch để chọn đúng ngày tháng năm dương lịch, hệ thống sẽ tự tìm ngày Âm lịch chuẩn xác.</span></li>
+              <li>Chọn Tên Cha và Mẹ: <span>Bấm vào ô tìm kiếm, gõ vài chữ cái rồi lấy ngón tay chạm chọn đúng tên từ danh sách hiện ra bên dưới. Tìm đúng tên người thân trong danh sách đổ xuống (Lưu ý: Chỉ chọn người có thông tin đúng, tránh chọn nhầm người trùng tên bị sai trước đó).</span></li>
+              <li>Định vị Mộ phần: <span>Nếu thành viên đã mất, các cụ chỉ cần dùng ngón tay <b>chạm trực tiếp vào bản đồ</b> bên dưới để đánh dấu vị trí an táng chính xác.</span></li>
+              <li>Bấm Gửi thông tin để hoàn tất.</li>
+            </ol>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label>5. Trạng thái hiện tại: <span className="required">*</span></label>
-          <div className="radio-group">
-            <label className="radio-label">
-              <input type="radio" name="is_alive" value="true" checked={formData.is_alive === "true"} onChange={handleChange} /> Còn sống
-            </label>
-            <label className="radio-label">
-              <input type="radio" name="is_alive" value="false" checked={formData.is_alive === "false"} onChange={handleChange} /> Đã mất
-            </label>
-          </div>
-        </div>
+          <h1>Nhập Thông Tin Thành Viên Mới</h1>
 
-        <div className="form-group">
-          <label>6. Thuộc Đời thứ mấy: <span className="required">*</span></label>
-          <select name="generation" value={formData.generation} onChange={handleChange} required>
-            <option value="">-- Chọn số Đời --</option>
-            {Array.from({ length: 15 }, (_, i) => i + 1).map((i) => (
-              <option key={i} value={i}>Đời thứ {i}</option>
-            ))}
-          </select>
-        </div>
+          <form id="giaPhaForm" ref={formRef} onSubmit={handleSubmit}>
+            <h3>Phần A: Thông tin cơ bản</h3>
 
-        <div className="form-group">
-          <label>7. Vai vế / Danh hiệu đặc biệt: <span className="required">*</span></label>
-          <select name="status" value={formData.status} onChange={handleStatusChange} required>
-            <option value="civilian">Thành viên thường (Mặc định)</option>
-            <option value="king">Thủy Tổ khai sáng dòng họ (Đời 1)</option>
-            <option value="queen">Vợ của Thủy Tổ (Đời 1)</option>
-            <option value="prince">Trưởng Tộc / Trưởng Nhánh</option>
-            <option value="princess">Vợ của Trưởng Tộc / Con dâu trưởng</option>
-          </select>
-          <span style={{ fontSize: "14px", color: "#666" }}>Dùng để tô màu khung đồ thị.</span>
-        </div>
-
-        <div className="form-group">
-          <label>8. Ngày tháng năm sinh (Dương lịch):</label>
-          <input type="date" name="dob_solar" value={formData.dob_solar} onChange={handleChange} />
-        </div>
-
-        <div className="form-group">
-          <label>9. Ngày tháng năm sinh (Âm lịch):</label>
-          <input
-            type="text"
-            name="dob_lunar"
-            value={formData.dob_lunar}
-            readOnly
-            placeholder="Hệ thống tự động tra cứu sau khi chọn dương lịch..."
-            style={{ backgroundColor: "#f9f9f9", fontWeight: "bold", color: "#8b0000" }}
-          />
-        </div>
-
-        {formData.is_alive === "false" && (
-          <div id="death_fields" style={{ borderLeft: "4px solid #666", paddingLeft: "15px", marginBottom: "20px" }}>
             <div className="form-group">
-              <label>10. Ngày mất (Dương lịch):</label>
-              <input type="date" name="dod_solar" value={formData.dod_solar} onChange={handleChange} />
+              <label>1. Ảnh chân dung (Nếu có):</label>
+              <input type="file" id="photo" accept="image/*" />
+              <span style={{ fontSize: "14px", color: "#666" }}>Hỗ trợ số hóa ảnh chân dung hoặc văn bia. Mặc định: ảnh trắng đen.</span>
             </div>
 
             <div className="form-group">
-              <label>11. Ngày giỗ (Âm lịch):</label>
+              <label>2. Họ và tên khai sinh: <span className="required">*</span></label>
+              <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Ví dụ: TRẦN VĂN AN" />
+            </div>
+
+            <div className="form-group">
+              <label>3. Tên tự / Tên hiệu (Nếu có):</label>
+              <input type="text" name="courtesyName" value={formData.courtesyName} onChange={handleChange} placeholder="Ví dụ: Thế Anh, Đức Hùng..." />
+            </div>
+
+            <div className="form-group">
+              <label>4. Giới tính: <span className="required">*</span></label>
+              <div className="radio-group">
+                <label className="radio-label">
+                  <input type="radio" name="gender" value="M" checked={formData.gender === "M"} onChange={handleChange} /> Nam
+                </label>
+                <label className="radio-label">
+                  <input type="radio" name="gender" value="F" checked={formData.gender === "F"} onChange={handleChange} /> Nữ
+                </label>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>5. Trạng thái hiện tại: <span className="required">*</span></label>
+              <div className="radio-group">
+                <label className="radio-label">
+                  <input type="radio" name="is_alive" value="true" checked={formData.is_alive === "true"} onChange={handleChange} /> Còn sống
+                </label>
+                <label className="radio-label">
+                  <input type="radio" name="is_alive" value="false" checked={formData.is_alive === "false"} onChange={handleChange} /> Đã mất
+                </label>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>6. Thuộc Đời thứ mấy: <span className="required">*</span></label>
+              <select name="generation" value={formData.generation} onChange={handleChange} required>
+                <option value="">-- Chọn số Đời --</option>
+                {Array.from({ length: 15 }, (_, i) => i + 1).map((i) => (
+                  <option key={i} value={i}>Đời thứ {i}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>7. Vai vế / Danh hiệu đặc biệt: <span className="required">*</span></label>
+              <select name="status" value={formData.status} onChange={handleStatusChange} required>
+                <option value="civilian">Thành viên thường (Mặc định)</option>
+                <option value="king">Thủy Tổ khai sáng dòng họ (Đời 1)</option>
+                <option value="queen">Vợ của Thủy Tổ (Đời 1)</option>
+                <option value="prince">Trưởng Tộc / Trưởng Nhánh</option>
+                <option value="princess">Vợ của Trưởng Tộc / Con dâu trưởng</option>
+              </select>
+              <span style={{ fontSize: "14px", color: "#666" }}>Dùng để tô màu khung đồ thị.</span>
+            </div>
+
+            <div className="form-group">
+              <label>8. Ngày tháng năm sinh (Dương lịch):</label>
+              <input type="date" name="dob_solar" value={formData.dob_solar} onChange={handleChange} />
+            </div>
+
+            <div className="form-group">
+              <label>9. Ngày tháng năm sinh (Âm lịch):</label>
               <input
                 type="text"
-                name="dod_lunar"
-                value={formData.dod_lunar}
+                name="dob_lunar"
+                value={formData.dob_lunar}
                 readOnly
-                placeholder="Hệ thống tự động tra cứu..."
+                placeholder="Hệ thống tự động tra cứu sau khi chọn dương lịch..."
                 style={{ backgroundColor: "#f9f9f9", fontWeight: "bold", color: "#8b0000" }}
               />
             </div>
 
-            <div className="form-group">
-              <label>12. Địa chỉ Mộ phần (Bằng chữ):</label>
-              <input type="text" name="burialPlaceText" value={formData.burialPlaceText} onChange={handleChange} placeholder="Ví dụ: Nghĩa trang Thượng Tổ, Đại Lộc..." />
-            </div>
-
-            <div className="form-group">
-              <label>13. Định vị vị trí Mộ phần trên Bản đồ (Chạm để ghim):</label>
-              <Map onLocationChange={handleLocationChange} />
-              <div className="location-info">
-                Vị trí hiện tại: {formData.burial_lat && formData.burial_lng ? `Vĩ độ (Lat): ${formData.burial_lat}, Kinh độ (Lng): ${formData.burial_lng}` : "Chưa chọn (Mặc định tâm dòng họ)"}
-              </div>
-            </div>
-          </div>
-        )}
-
-        <h3>Phần B: Xác định mối quan hệ dòng họ</h3>
-
-        {["father", "mother", "spouse"].map((type) => {
-          const label = type === "father" ? "14. Họ và tên của CHA:" : type === "mother" ? "15. Họ và tên của MẸ:" : "16. Nếu là Con Dâu/Con Rể, chọn tên Vợ/Chồng thuộc Tộc Trần:";
-          const placeholder = type === "father" ? "Gõ để tìm tên Cha..." : type === "mother" ? "Gõ để tìm tên Mẹ..." : "Gõ để tìm tên Vợ hoặc Chồng...";
-
-          return (
-            <div className="form-group" key={type}>
-              <label>{label}</label>
-              <input
-                type="text"
-                value={formData[`${type}Name`]}
-                onChange={(e) => handleInputSuggest(type, e.target.value)}
-                onFocus={() => handleFocusSuggest(type)}
-                placeholder={placeholder}
-                autoComplete="off"
-              />
-              {suggestions.type === type && (
-                <div className="autocomplete-suggestions" style={{ display: "block" }}>
-                  {suggestions.list.map((n, idx) => (
-                    <div
-                      key={idx}
-                      className="suggestion-item"
-                      onClick={() => !n.error && selectSuggestion(type, n.id, n.name)}
-                      style={{ color: n.error ? "red" : "inherit" }}
-                    >
-                      {n.error ? n.text : (
-                        <>
-                          <span style={{ fontWeight: 600 }}>{n.name}</span>
-                          <span style={{ fontSize: '12px', color: '#888', marginLeft: '6px' }}>
-                            {n.generation ? `Đời ${n.generation}` : ''}
-                            {n.dobSolar ? ` · Sinh ${n.dobSolar.split('/').pop() || n.dobSolar}` : (n.dob ? ` · ${n.dob.split(' ')[0]}` : '')}
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  ))}
+            {formData.is_alive === "false" && (
+              <div id="death_fields" style={{ borderLeft: "4px solid #666", paddingLeft: "15px", marginBottom: "20px" }}>
+                <div className="form-group">
+                  <label>10. Ngày mất (Dương lịch):</label>
+                  <input type="date" name="dod_solar" value={formData.dod_solar} onChange={handleChange} />
                 </div>
-              )}
-            </div>
-          );
-        })}
 
-        <h3>Phần C: Tiểu sử</h3>
-        <div className="form-group">
-          <label>17. Tiểu sử tóm tắt:</label>
-          <textarea name="bio" value={formData.bio} onChange={handleChange} rows="3" placeholder="Ghi nhận công trạng, sự nghiệp, đóng góp cho dòng họ..."></textarea>
-        </div>
+                <div className="form-group">
+                  <label>11. Ngày giỗ (Âm lịch):</label>
+                  <input
+                    type="text"
+                    name="dod_lunar"
+                    value={formData.dod_lunar}
+                    readOnly
+                    placeholder="Hệ thống tự động tra cứu..."
+                    style={{ backgroundColor: "#f9f9f9", fontWeight: "bold", color: "#8b0000" }}
+                  />
+                </div>
 
-        <button type="submit" className="btn-submit">GỬI THÔNG TIN VÀO GIA PHẢ</button>
-      </form>
+                <div className="form-group">
+                  <label>12. Địa chỉ Mộ phần (Bằng chữ):</label>
+                  <input type="text" name="burialPlaceText" value={formData.burialPlaceText} onChange={handleChange} placeholder="Ví dụ: Nghĩa trang Thượng Tổ, Đại Lộc..." />
+                </div>
 
-      {showModal && processedPayload && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3 style={{ color: "var(--primary-color)", borderBottom: "2px solid var(--primary-color)", paddingBottom: "5px", marginTop: "0" }}>
-              XÁC NHẬN DỮ LIỆU
-            </h3>
-            <p style={{ color: "#666", fontSize: "14px", marginTop: "-5px" }}>Hệ thống đã tự động tính toán Đời và chuỗi năm sinh. Vui lòng kiểm tra lại.</p>
-
-            <div style={{ fontSize: "16px", lineHeight: "1.8", marginBottom: "20px", background: "#f9f9f9", padding: "10px", borderRadius: "6px", border: "1px solid #eee" }}>
-              <div style={{ background: "#eef", padding: "10px", marginBottom: "10px", borderRadius: "4px" }}>
-                <b style={{ color: "var(--primary-color)" }}>Đời (Tự tính):</b> {processedPayload.title} <br />
-                <b style={{ color: "var(--primary-color)" }}>Tóm tắt Sinh-Tử:</b> {processedPayload.dob}
+                <div className="form-group">
+                  <label>13. Định vị vị trí Mộ phần trên Bản đồ (Chạm để ghim):</label>
+                  <Map onLocationChange={handleLocationChange} />
+                  <div className="location-info">
+                    Vị trí hiện tại: {formData.burial_lat && formData.burial_lng ? `Vĩ độ (Lat): ${formData.burial_lat}, Kinh độ (Lng): ${formData.burial_lng}` : "Chưa chọn (Mặc định tâm dòng họ)"}
+                  </div>
+                </div>
               </div>
-              <b>Họ và tên:</b> <span style={{ color: "var(--primary-color)" }}>{processedPayload.name}</span> <br />
-              <b>Tên tự/hiệu:</b> {processedPayload.courtesyName || "Không có"} <br />
-              <b>Giới tính:</b> {processedPayload.gender === 'M' ? "Nam" : "Nữ"} <br />
-              <b>Ảnh:</b> {processedPayload.photo} <br />
-              <b>Ngày sinh (Dương):</b> {processedPayload.dobSolar || "Chưa nhập"} <br />
-              <span style={{ color: "var(--primary-color)", fontSize: "14px" }}>Âm lịch: {processedPayload.dobLunar || "Chưa có"}</span> <br />
+            )}
 
-              {!processedPayload.isAlive && (
-                <>
+            <h3>Phần B: Xác định mối quan hệ dòng họ</h3>
+
+            {["father", "mother", "spouse"].map((type) => {
+              const label = type === "father" ? "14. Họ và tên của CHA:" : type === "mother" ? "15. Họ và tên của MẸ:" : "16. Nếu là Con Dâu/Con Rể, chọn tên Vợ/Chồng thuộc Tộc Trần:";
+              const placeholder = type === "father" ? "Gõ để tìm tên Cha..." : type === "mother" ? "Gõ để tìm tên Mẹ..." : "Gõ để tìm tên Vợ hoặc Chồng...";
+
+              return (
+                <div className="form-group" key={type}>
+                  <label>{label}</label>
+                  <input
+                    type="text"
+                    value={formData[`${type}Name`]}
+                    onChange={(e) => handleInputSuggest(type, e.target.value)}
+                    onFocus={() => handleFocusSuggest(type)}
+                    placeholder={placeholder}
+                    autoComplete="off"
+                  />
+                  {suggestions.type === type && (
+                    <div className="autocomplete-suggestions" style={{ display: "block" }}>
+                      {suggestions.list.map((n, idx) => (
+                        <div
+                          key={idx}
+                          className="suggestion-item"
+                          onClick={() => !n.error && selectSuggestion(type, n.id, n.name)}
+                          style={{ color: n.error ? "red" : "inherit" }}
+                        >
+                          {n.error ? n.text : (
+                            <>
+                              <span style={{ fontWeight: 600 }}>{n.name}</span>
+                              <span style={{ fontSize: '12px', color: '#888', marginLeft: '6px' }}>
+                                {n.generation ? `Đời ${n.generation}` : ''}
+                                {n.dobSolar ? ` · Sinh ${n.dobSolar.split('/').pop() || n.dobSolar}` : (n.dob ? ` · ${n.dob.split(' ')[0]}` : '')}
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            <h3>Phần C: Tiểu sử</h3>
+            <div className="form-group">
+              <label>17. Tiểu sử tóm tắt:</label>
+              <textarea name="bio" value={formData.bio} onChange={handleChange} rows="3" placeholder="Ghi nhận công trạng, sự nghiệp, đóng góp cho dòng họ..."></textarea>
+            </div>
+
+            <button type="submit" className="btn-submit">GỬI THÔNG TIN VÀO GIA PHẢ</button>
+          </form>
+
+          {showModal && processedPayload && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3 style={{ color: "var(--primary-color)", borderBottom: "2px solid var(--primary-color)", paddingBottom: "5px", marginTop: "0" }}>
+                  XÁC NHẬN DỮ LIỆU
+                </h3>
+                <p style={{ color: "#666", fontSize: "14px", marginTop: "-5px" }}>Hệ thống đã tự động tính toán Đời và chuỗi năm sinh. Vui lòng kiểm tra lại.</p>
+
+                <div style={{ fontSize: "16px", lineHeight: "1.8", marginBottom: "20px", background: "#f9f9f9", padding: "10px", borderRadius: "6px", border: "1px solid #eee" }}>
+                  <div style={{ background: "#eef", padding: "10px", marginBottom: "10px", borderRadius: "4px" }}>
+                    <b style={{ color: "var(--primary-color)" }}>Đời (Tự tính):</b> {processedPayload.title} <br />
+                    <b style={{ color: "var(--primary-color)" }}>Tóm tắt Sinh-Tử:</b> {processedPayload.dob}
+                  </div>
+                  <b>Họ và tên:</b> <span style={{ color: "var(--primary-color)" }}>{processedPayload.name}</span> <br />
+                  <b>Tên tự/hiệu:</b> {processedPayload.courtesyName || "Không có"} <br />
+                  <b>Giới tính:</b> {processedPayload.gender === 'M' ? "Nam" : "Nữ"} <br />
+                  <b>Ảnh:</b> {processedPayload.photo} <br />
+                  <b>Ngày sinh (Dương):</b> {processedPayload.dobSolar || "Chưa nhập"} <br />
+                  <span style={{ color: "var(--primary-color)", fontSize: "14px" }}>Âm lịch: {processedPayload.dobLunar || "Chưa có"}</span> <br />
+
+                  {!processedPayload.isAlive && (
+                    <>
+                      <hr style={{ border: "0", borderTop: "1px dashed #ccc", margin: "10px 0" }} />
+                      <b>Ngày mất (Dương):</b> {processedPayload.dodSolar || "Chưa nhập"} <br />
+                      <span style={{ color: "var(--primary-color)", fontSize: "14px" }}>Âm lịch giỗ: {processedPayload.dodLunar || "Chưa có"}</span> <br />
+                      <b>Mộ phần:</b> {processedPayload.burialPlace || "Chưa ghi nhận"} <br />
+                    </>
+                  )}
+
                   <hr style={{ border: "0", borderTop: "1px dashed #ccc", margin: "10px 0" }} />
-                  <b>Ngày mất (Dương):</b> {processedPayload.dodSolar || "Chưa nhập"} <br />
-                  <span style={{ color: "var(--primary-color)", fontSize: "14px" }}>Âm lịch giỗ: {processedPayload.dodLunar || "Chưa có"}</span> <br />
-                  <b>Mộ phần:</b> {processedPayload.burialPlace || "Chưa ghi nhận"} <br />
-                </>
-              )}
+                  <b>Cha:</b> {processedPayload.fatherName ? processedPayload.fatherName : <span style={{ color: "red" }}>Bỏ trống</span>} <br />
+                  {processedPayload.motherName && <><b>Mẹ:</b> {processedPayload.motherName} <br /></>}
+                  {processedPayload.spouseName && <><b>Phối ngẫu:</b> {processedPayload.spouseName} <br /></>}
+                </div>
 
-              <hr style={{ border: "0", borderTop: "1px dashed #ccc", margin: "10px 0" }} />
-              <b>Cha:</b> {processedPayload.fatherName ? processedPayload.fatherName : <span style={{ color: "red" }}>Bỏ trống</span>} <br />
-              {processedPayload.motherName && <><b>Mẹ:</b> {processedPayload.motherName} <br /></>}
-              {processedPayload.spouseName && <><b>Phối ngẫu:</b> {processedPayload.spouseName} <br /></>}
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>SỬA LẠI</button>
+                  <button type="button" className="btn-confirm" onClick={confirmSubmit}>LƯU GIA PHẢ</button>
+                </div>
+              </div>
             </div>
-
-            <div style={{ display: "flex", gap: "10px" }}>
-              <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>SỬA LẠI</button>
-              <button type="button" className="btn-confirm" onClick={confirmSubmit}>LƯU GIA PHẢ</button>
-            </div>
-          </div>
+          )}
         </div>
-      )}
-    </div>
-  );
+          );
 }
