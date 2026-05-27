@@ -37,8 +37,6 @@ export default function Home() {
   const formRef = useRef(null);
 
   const [dbMembers, setDbMembers] = useState([]);
-  // Lưu thông tin thành viên vừa lưu thành công (dùng cho nút báo Admin)
-  const [lastSaved, setLastSaved] = useState(null); // { id, name }
 
   // Tải danh sách thành viên từ Supabase hoặc fallback
   useEffect(() => {
@@ -304,9 +302,6 @@ export default function Home() {
       if (res && res.fallback) {
         alert(`Đã lưu tạm thông tin thành viên "${savedName}" vào LocalStorage (Do Supabase chưa được cấu hình).`);
       } else {
-        // ✅ Lưu thành công: lưu thông tin để nút báo Admin dùng
-        setLastSaved({ id: res.newMemberId, name: savedName });
-
         // ✅ Tự động fetch lại danh sách cha/mẹ ngay lập tức (không cần reload trang)
         try {
           const data = await fetchFamilyData();
@@ -352,11 +347,20 @@ export default function Home() {
   return (
     <div className="container">
       <div className="instruction-section">
-        <h2>Bảng Hướng Dẫn Từng Bước Cho Các Cụ</h2>
+        <h2>Bảng Hướng Dẫn Từng Bước Cho Các Cụ <br>
+            HƯỚNG DẪN NHẬP THÔNG TIN GIA PHẢ
+          (Dành cho điện thoại Android)
+        </h2>
+        <p><b>3 LƯU Ý QUAN TRỌNG TRƯỚC KHI LÀM:</b><br>
+Nhập sai không sao cả: Nếu lỡ bấm lưu mà thông tin bị sai, các bác cứ bỏ qua và tiến hành tạo lại một người mới chính xác hơn. Hệ thống chỉ cho nhập vào, việc sửa và xóa các bản ghi sai sẽ do Cháu Admin xử lý sau, các bác không cần bận tâm.<br>
+
+Chú ý khi chọn người thân: Khi chọn Cha, Mẹ, Dâu, Rể... trong danh sách, các bác nhớ nhìn kỹ để chọn đúng tên người mình vừa tạo đúng, bỏ qua những tên bị nhập sai trước đó.<br>
+
+Bắt buộc tải lại trang: Sau mỗi lần bấm "Lưu" hoặc "Tạo xong" một thành viên, các bác phải bấm nút Tải lại trang (nút có hình mũi tên vòng tròn ở góc trên trình duyệt điện thoại) thì hệ thống mới cập nhật tên người đó vào danh sách để chọn cho các bước tiếp theo.</p>
         <ol>
           <li>Điền Thông tin cá nhân: <span>Nhập tên, chọn Giới tính và số Đời của mình.</span></li>
           <li>Chọn Ngày sinh & Ngày mất: <span>Bấm vào ô lịch để chọn đúng ngày tháng năm dương lịch, hệ thống sẽ tự tìm ngày Âm lịch chuẩn xác.</span></li>
-          <li>Chọn Tên Cha và Mẹ: <span>Bấm vào ô tìm kiếm, gõ vài chữ cái rồi lấy ngón tay chạm chọn đúng tên từ danh sách hiện ra bên dưới.</span></li>
+          <li>Chọn Tên Cha và Mẹ: <span>Bấm vào ô tìm kiếm, gõ vài chữ cái rồi lấy ngón tay chạm chọn đúng tên từ danh sách hiện ra bên dưới. Tìm đúng tên người thân trong danh sách đổ xuống (Lưu ý: Chỉ chọn người có thông tin đúng, tránh chọn nhầm người trùng tên bị sai trước đó).</span></li>
           <li>Định vị Mộ phần: <span>Nếu thành viên đã mất, các cụ chỉ cần dùng ngón tay <b>chạm trực tiếp vào bản đồ</b> bên dưới để đánh dấu vị trí an táng chính xác.</span></li>
           <li>Bấm Gửi thông tin để hoàn tất.</li>
         </ol>
@@ -531,45 +535,6 @@ export default function Home() {
 
         <button type="submit" className="btn-submit">GỬI THÔNG TIN VÀO GIA PHẢ</button>
       </form>
-
-      {/* Thông báo lưu thành công + nút báo Admin */}
-      {lastSaved && (
-        <div style={{
-          margin: '16px 0',
-          padding: '14px 16px',
-          background: '#f0fff4',
-          border: '1px solid #68d391',
-          borderRadius: '8px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px'
-        }}>
-          <div style={{ color: '#276749', fontWeight: 600, fontSize: '15px' }}>
-            ✅ Đã lưu thành công: <span style={{ color: 'var(--primary-color)' }}>{lastSaved.name}</span>
-          </div>
-          <div style={{ color: '#555', fontSize: '13px' }}>
-            Danh sách Cha/Mẹ đã được cập nhật ngay. Bạn có thể nhập tiếp thành viên mới.
-          </div>
-          <div style={{ borderTop: '1px dashed #ccc', paddingTop: '8px', marginTop: '4px' }}>
-            <span style={{ fontSize: '13px', color: '#888' }}>Nhập sai thông tin? </span>
-            <a
-              href={`mailto:admin@trantoc.vn?subject=Yêu cầu xóa thành viên nhập sai&body=Kính gửi Admin,%0A%0ATôi vừa nhập sai thông tin và cần xóa thành viên sau:%0A%0A- Tên: ${encodeURIComponent(lastSaved.name)}%0A- ID hệ thống: ${lastSaved.id}%0A%0AXin cảm ơn!`}
-              style={{
-                color: '#c53030',
-                fontWeight: 600,
-                fontSize: '13px',
-                textDecoration: 'underline',
-                cursor: 'pointer'
-              }}
-            >
-              🚨 Bấm vào đây để báo Admin xóa
-            </a>
-            <div style={{ fontSize: '11px', color: '#aaa', marginTop: '4px' }}>
-              Mã phần tử cần xóa: <code style={{ background: '#eee', padding: '1px 5px', borderRadius: '3px' }}>{lastSaved.id}</code>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showModal && processedPayload && (
         <div className="modal-overlay">

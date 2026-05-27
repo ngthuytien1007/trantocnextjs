@@ -235,7 +235,7 @@ export const saveFamilyMember = async (payload) => {
       }
     }
 
-    return { success: true, newMemberId: String(newMemberId) };
+    return { success: true };
   } catch (error) {
     console.error("❌ Lỗi khi lưu thành viên vào Supabase:", error);
     throw error;
