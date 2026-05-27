@@ -1045,10 +1045,10 @@ const FamilyTree = forwardRef(function FamilyTree({ themeName, onNodeClick, rela
           }}>
             <i className="bi bi-diagram-3" style={{ fontSize: '4rem', color: '#800000', marginBottom: '20px', display: 'block' }}></i>
             <h3 style={{ fontFamily: 'Playfair Display, Georgia, serif', color: '#5c0606', fontWeight: 'bold', fontSize: '2rem', margin: '0 0 15px 0' }}>
-              Chưa có dữ liệu dòng tộc
+              Hãy thêm Dữ liệu Gia Tộc!
             </h3>
             <p style={{ fontSize: '1.2rem', color: '#666', lineHeight: '1.6', margin: '0' }}>
-              Thêm thông tin từ Trang trước mới Thấy
+              Hiện chưa có dữ liệu nào. Vui lòng thêm thành viên để bắt đầu xây dựng gia phả.
             </p>
           </div>
         </div>

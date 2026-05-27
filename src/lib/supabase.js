@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { familyData as staticFamilyData } from '../components/FamilyTree';
 
 // ============================================================================
 // SUPABASE CONFIGURATION
@@ -37,8 +36,8 @@ export const isSupabaseConfigured = () => {
  */
 export const fetchFamilyData = async () => {
   if (!supabase) {
-    console.warn("⚠️ Supabase chưa được cấu hình. Sử dụng dữ liệu demo tĩnh.");
-    return staticFamilyData;
+    console.warn("⚠️ Supabase chưa được cấu hình.");
+    return null;
   }
 
   try {
@@ -57,12 +56,11 @@ export const fetchFamilyData = async () => {
 
     if (linksError) throw linksError;
 
-    // Nếu cơ sở dữ liệu trống, thực hiện Tự động Seed dữ liệu mẫu để Wow người dùng!
-    // if (!nodes || nodes.length === 0) {
-    //   console.log("🌱 Database trống. Đang tự động nạp dữ liệu gia phả mẫu...");
-    //   // await seedDemoData();
-    //   return staticFamilyData;
-    // }
+    // Nếu cơ sở dữ liệu trống, trả về null để hiển thị thông báo
+    if (!nodes || nodes.length === 0) {
+      console.log("📭 Database trống. Hãy thêm Dữ liệu Gia Tộc!");
+      return null;
+    }
 
     // Định dạng dữ liệu tương thích với GoJS (chuyển đổi kiểu dữ liệu cho khớp)
     const nodeDataArray = nodes.map(n => ({
@@ -97,8 +95,8 @@ export const fetchFamilyData = async () => {
     return { nodeDataArray, linkDataArray };
   } catch (error) {
     console.error("❌ Lỗi khi tải dữ liệu từ Supabase:", error);
-    console.warn("⚠️ Đang tự động chuyển sang dữ liệu mẫu tĩnh để duy trì UI.");
-    return staticFamilyData;
+    console.warn("⚠️ Không thể tải dữ liệu.");
+    return null;
   }
 };
 

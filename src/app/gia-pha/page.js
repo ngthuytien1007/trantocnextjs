@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { familyData } from '../../components/FamilyTree';
 import { calculateRelation } from '../../components/FamilyTree';
 import { fetchFamilyData } from '@/lib/supabase';
 import './style.css';
@@ -80,7 +79,7 @@ export default function GiaPhaPage() {
       setSearchResults([]);
       return;
     }
-    const activeNodes = (dbTreeData || familyData).nodeDataArray;
+    const activeNodes = dbTreeData?.nodeDataArray || [];
     const matches = activeNodes.filter(d =>
       d.name && d.name.toLowerCase().includes(query.trim().toLowerCase()) && d.category !== "LinkLabel"
     );
@@ -91,7 +90,7 @@ export default function GiaPhaPage() {
   const handleSearchSubmit = () => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return;
-    const activeNodes = (dbTreeData || familyData).nodeDataArray;
+    const activeNodes = dbTreeData?.nodeDataArray || [];
     const match = activeNodes.find(d =>
       d.name && d.name.toLowerCase().includes(query) && d.category !== "LinkLabel"
     );
